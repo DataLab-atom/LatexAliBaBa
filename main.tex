@@ -351,11 +351,25 @@ the end-to-end system responds in seconds even under high alert volume.
 The ``specialisation beats generalisation'' phenomenon is well-supported by the
 distillation literature \citep{dss,ddk} and follows from two observations:
 (i) a general LLM's parameters are shared across thousands of tasks, diluting
-per-domain capacity; (ii) an SLM trained exclusively on domain-specific CoT data
-develops tightly aligned internal representations for that domain, achieving higher
-precision despite far fewer parameters.
-We will provide both empirical evidence (ablation studies) and a capacity-allocation
-analysis to formalise this intuition.
+per-domain representational capacity \citep{slmsurvey}; (ii) an SLM fine-tuned
+exclusively on domain-specific CoT data occupies a lower-dimensional subspace of
+the parameter space that is tightly aligned with the target domain's inference
+patterns, achieving higher precision despite far fewer parameters.
+We will provide both empirical evidence (ablation studies varying model size and
+training-data domain purity) and a capacity-allocation analysis to formalise this
+intuition.
+
+\textbf{Why not use the 7B medium model directly as executor?}
+One may ask: since Qwen3-7B already possesses CoT capability and can run locally
+on a single A10 GPU, why distil further to a 1.5B/3B model?
+Three reasons: (1) \emph{accuracy}: a 1.5B SLM trained exclusively on
+domain-verified CoT outperforms a 7B generalist on the target sub-task—the
+domain-purity effect dominates the size effect at this scale \citep{ddk};
+(2) \emph{deployment scale}: in a large platform with hundreds of hosts,
+1.5B SLMs can be co-located with each service node at negligible memory overhead,
+enabling zero-latency local inference without GPU scheduling;
+(3) \emph{cost}: 1.5B inference costs $\approx$5$\times$ fewer FLOPs than 7B,
+critical for high-frequency fault monitoring (thousands of events per minute).
 
 % ══════════════════════════════════════════════════════════════════════════════
 %  2. MILESTONE
