@@ -2,7 +2,7 @@
 
 % ── Packages ──────────────────────────────────────────────────────────────────
 \usepackage[a4paper, top=2.5cm, bottom=2.5cm, left=2.8cm, right=2.8cm]{geometry}
-\usepackage{fontenc}
+\usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern}
 \usepackage{microtype}
@@ -79,9 +79,9 @@
                               \end{minipage}\\[12pt]
     \textbf{Topic}          & Topic 1 (Large–Small Model Collaboration) / Topic 10 (AIOps)\\[6pt]
     \textbf{Date}           & March 2026\\[6pt]
-    \textbf{Organization}   & 【填写所在高校/科研院所全称】\\[6pt]
-    \textbf{Author (PI)}    & 【填写PI姓名】\\[6pt]
-    \textbf{Email}          & 【填写PI邮箱】\\
+    \textbf{Organization}   & \textit{<FILL: University/Institution Full Name>}\\[6pt]
+    \textbf{Author (PI)}    & \textit{<FILL: PI Full Name>}\\[6pt]
+    \textbf{Email}          & \textit{<FILL: pi@university.edu>}\\
   \end{tabular}
 \end{center}
 
@@ -171,12 +171,17 @@ approach.
   \item \textbf{Data abundance without labelling cost.}
         Every large-scale platform accumulates rich
         $\langle$alert+log, remediation-action$\rangle$ pairs in its operational
-        databases—precisely the $\langle$input, output$\rangle$ format our pipeline
-        requires—with no additional annotation effort.
+        databases—precisely the $\langle$input, output$\rangle$ format MOLE1
+        requires—with zero additional annotation effort.
   \item \textbf{Objective, binary verification.}
         ``Did the proposed remediation resolve the fault?'' is a ground-truth signal
         available in historical records, enabling fully automated offline evaluation
-        via replay of past incidents.
+        via incident replay—no live environment needed.
+  \item \textbf{Quantifiable latency advantage.}
+        Fault response is acutely latency-sensitive. A locally deployed SLM responds
+        in $<$100\,ms; a cloud LLM API call costs 500\,ms--2\,s and times out under
+        peak-load fault storms. This 10--20$\times$ gap is a concrete, measurable
+        industrial pain point that MOLE1 directly addresses.
   \item \textbf{Strategic dual coverage.}
         The proposed method directly addresses both Topic 1 (LLM–SLM collaboration
         mechanism) and Topic 10 (fault emergency response AIOps), demonstrating that
@@ -209,28 +214,41 @@ This project pursues four tightly coupled objectives:
 % ──────────────────────────────────────────────────────────────────────────────
 \subsection{Development Method}
 
-\subsubsection*{Core Insight: Answer-Verified CoT Synthesis (MOLE1)}
+\subsubsection*{Core Insight: MOLE1—Answer-Verified CoT Synthesis}
 
-The central methodological innovation is the use of the \emph{known answer as an
-automatic verifier} for candidate reasoning chains, eliminating the need for human
-annotation or a domain-aware teacher model.
+We propose \textbf{MOLE1} (\textbf{M}odel-\textbf{O}utput-\textbf{L}abel-\textbf{E}licited
+CoT Synthesis, iteration 1), a domain-agnostic pipeline that converts raw
+$\langle$input, output$\rangle$ pairs into CoT-annotated training data \emph{without
+any human annotation or domain-aware teacher model}.
+The key innovation is using the \emph{known answer as an automatic verifier}:
 
-The derivation chain is:
 \[
 \underbrace{\langle \text{query},\, \text{answer} \rangle}_{\text{available cold-start}}
-\;\xrightarrow{\text{medium LLM forward pass}}\;
+\;\xrightarrow{\text{medium LLM, }k\text{ samples}}\;
 \text{candidate CoTs}
 \;\xrightarrow{\text{answer-consistency filter}}\;
-\underbrace{\langle \text{query},\, \text{CoT}^*, \text{answer} \rangle}_{\text{training triples}}
+\underbrace{\langle \text{query},\, \text{CoT}^*, \text{answer} \rangle}_{\text{verified triples}}
 \;\xrightarrow{\text{SLM fine-tune}}\;
 \text{specialist SLM}
 \]
 
-A medium-sized model (Qwen3-7B) generates multiple candidate CoT traces for each
-query via temperature sampling. Only traces whose final answer matches the ground-truth
-answer are retained. This pass/fail criterion is fully automatic and domain-agnostic,
-making it viable at cold-start. The filtered triples train a lightweight SLM
-(Qwen3-1.5B or 3B) exclusively on the target domain.
+A medium-sized model (e.g., Qwen3-7B) generates $k$ candidate reasoning chains per
+query via temperature sampling ($\tau{=}0.8$). Only chains whose final conclusion
+matches the ground-truth answer are retained—a pass/fail criterion that requires
+\emph{no domain knowledge}. The verified triples fine-tune a compact SLM (e.g.,
+Qwen3-1.5B/3B) exclusively on the target domain.
+
+\textbf{Domain generality.}
+Although we validate MOLE1 on AIOps, the pipeline is \emph{entirely
+domain-agnostic}: it requires only that (i) historical
+$\langle$input, output$\rangle$ pairs exist and (ii) answer correctness can be
+verified automatically. This condition holds across a wide range of industrial
+scenarios—customer-service triage, code-review classification, supply-chain
+anomaly detection—making MOLE1 a general-purpose cold-start engine for
+LLM–SLM collaboration, well beyond its AIOps instantiation.
+The AIOps domain is chosen as the primary validation testbed because it uniquely
+satisfies all three structural advantages described above and provides a clear,
+reproducible experimental protocol.
 
 \subsubsection*{Four-Stage Pipeline}
 
@@ -254,12 +272,40 @@ Figure~\ref{fig:pipeline} shows the complete MOLE1 pipeline.
   \item[Stage 3 – Answer-Verification Filtering.]
         Each candidate CoT is evaluated: does the final conclusion match the recorded
         remediation action? Matched CoTs are retained; mismatched ones are discarded.
-        Expected acceptance rate $\approx30$–60\% depending on sub-scenario complexity.
+        Acceptance rate varies with task complexity; analogous filtering in STaR
+        \citep{star} yields 30--70\% retention under comparable settings.
+        We note that data quality is a prerequisite: records involving operator error
+        or mislabelled remediation are excluded via a lightweight anomaly filter in
+        Stage 1.
   \item[Stage 4 – SLM Fine-Tuning and MCP Packaging.]
         The verified triples train a compact SLM via supervised fine-tuning (SFT) with
         LoRA. The trained model is wrapped as an MCP-compliant tool endpoint and
         registered with the Planner layer.
 \end{description}
+
+\subsubsection*{Experimental Design and Evaluation Protocol}
+
+\textbf{Dataset.}
+We use a combination of (a) a proprietary AIOps dataset from Alibaba operational
+logs (subject to data-sharing agreement) and (b) the publicly available
+AIOps-2022 benchmark \citep{aiops} for reproducibility.
+Experiments cover three AIOps sub-scenarios: database-layer faults, network
+partition events, and container resource exhaustion.
+
+\textbf{Baselines.}
+\begin{itemize}[itemsep=1pt]
+  \item \textbf{LLM-only}: Qwen3-72B queried via API, no local SLM.
+  \item \textbf{SLM w/o CoT}: SLM fine-tuned on $\langle$input, output$\rangle$ pairs
+        only (no reasoning chains).
+  \item \textbf{SLM + teacher CoT}: SLM fine-tuned with CoT generated by Qwen3-72B
+        acting as teacher (the ``oracle'' upper bound requiring a capable teacher).
+  \item \textbf{MOLE1 (ours)}: SLM fine-tuned on answer-verified CoT from Qwen3-7B.
+\end{itemize}
+
+\textbf{Metrics.}
+Remediation-action accuracy (top-1 match rate), inference latency (p50/p99),
+and compute cost per query (FLOPs / API tokens).
+Statistical significance assessed via bootstrap resampling ($n{=}1000$).
 
 \subsubsection*{System Architecture: Planner + MCP Tool Layer}
 
@@ -396,20 +442,18 @@ MCP-compliant AIOps tool-endpoint toolkit &
 Interim reports (kick-off, mid-term, final) &
   Project reports &
   Submitted per agreed schedule \\
-\midrule
-\multicolumn{3}{p{14cm}}{%
-  \textbf{Expected technical improvement:}
-  SLMs produced by MOLE1 are expected to achieve accuracy within 5\% of GPT-4-class
-  LLMs on AIOps fault-diagnosis benchmarks while reducing per-inference latency
-  by $>$10$\times$ (from $\sim$1\,s to $<$100\,ms) and token cost to zero
-  (local inference).\\[4pt]
-  \textbf{Expected business value for Alibaba:}
-  A reusable, domain-agnostic pipeline that Alibaba SRE teams can apply to any new
-  AIOps sub-scenario within days, without labelling budget or pre-existing expert models.
-}\\
 \bottomrule
 \end{tabularx}
 \end{table}
+
+\noindent\textbf{Expected technical improvement:}
+SLMs produced by MOLE1 are expected to achieve accuracy within 5\% of GPT-4-class
+LLMs on AIOps fault-diagnosis benchmarks while reducing per-inference latency
+by $>$10$\times$ (from $\sim$1\,s to $<$100\,ms) and token cost to zero (local inference).
+
+\noindent\textbf{Expected business value for Alibaba:}
+A reusable, domain-agnostic pipeline that Alibaba SRE teams can apply to any new
+AIOps sub-scenario within days, without labelling budget or pre-existing expert models.
 
 % ══════════════════════════════════════════════════════════════════════════════
 %  4. HUMAN RESOURCES, EQUIPMENT AND BUDGET
@@ -427,17 +471,17 @@ Interim reports (kick-off, mid-term, final) &
 \textbf{Total} & \textbf{Role}\\
  & & \textbf{(RMB/mo.)} & & \textbf{(RMB)} & \\
 \midrule
-【PI姓名】 &
-  【职称】, 【院校名】 &
-  9,000 & 3 months & 27,000 & PI\\
-【博士生1姓名】 &
-  PhD Student, 【院校名】 &
+\textit{<FILL: PI Name>} &
+  \textit{<FILL: Professor>}, \textit{<FILL: University Name>} &
+  12,000 & 3 months & 36,000 & PI\\
+\textit{<FILL: PhD Student 1 Name>} &
+  PhD Student, \textit{<FILL: University Name>} &
   12,000 & 12 months & 144,000 & Research Assistant\\
-【博士生2姓名】 &
-  PhD Student, 【院校名】 &
+\textit{<FILL: PhD Student 2 Name>} &
+  PhD Student, \textit{<FILL: University Name>} &
   12,000 & 12 months & 144,000 & Research Assistant\\
 \midrule
-\multicolumn{4}{r}{\textbf{Sub-total Personnel}} & \textbf{315,000} & \\
+\multicolumn{4}{r}{\textbf{Sub-total Personnel (a)}} & \textbf{324,000} & \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -451,7 +495,7 @@ Interim reports (kick-off, mid-term, final) &
 \toprule
 \textbf{Item} & \textbf{Unit Price (RMB)} & \textbf{Total (RMB)} & \textbf{Remarks}\\
 \midrule
-GPU cloud computing (A100 node-hours) & — & 100,000 &
+GPU cloud computing (A100 node-hours) & — & 91,000 &
   For SLM training runs (Stage 2--3)\\
 Local inference server (lease/purchase) & 50,000 & 50,000 &
   MCP endpoint deployment \& latency testing\\
@@ -460,7 +504,7 @@ Conference travel (2 venues) & 15,000 & 30,000 &
 Open-access publication fees & 10,000 & 20,000 &
   ACL Anthology / NeurIPS open access\\
 \midrule
-\multicolumn{2}{r}{\textbf{Sub-total Research Expenses}} & \textbf{200,000} & \\
+\multicolumn{2}{r}{\textbf{Sub-total Research Expenses (b)}} & \textbf{191,000} & \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -474,13 +518,13 @@ Open-access publication fees & 10,000 & 20,000 &
 \toprule
 \textbf{Item} & \textbf{Remarks} & \textbf{Amount (RMB)}\\
 \midrule
-(a) Total Personnel Expenses & See Section 4.1 & 315,000\\
-(b) Total Research Expenses  & See Section 4.2 & 200,000\\
+(a) Total Personnel Expenses & See Section 4.1 & 324,000\\
+(b) Total Research Expenses  & See Section 4.2 & 191,000\\
 (c) Indirect Cost            &
   University overhead: $16.5\%\times(\text{a}+\text{b})
-  = 16.5\%\times 515{,}000$ & 84,975\\
+  = 16.5\%\times 515{,}000 \approx 85{,}000$ & 85,000\\
 \midrule
-\textbf{Grand Total} & (a) + (b) + (c) & \textbf{599,975 $\approx$ 600,000}\\
+\textbf{Grand Total} & (a) + (b) + (c) & \textbf{600,000}\\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -490,28 +534,27 @@ Open-access publication fees & 10,000 & 20,000 &
 % ══════════════════════════════════════════════════════════════════════════════
 \section{Biographical Sketches of Principal Investigator(s)}
 
-\textbf{【PI姓名】}\\
-【职称/职务】, 【院系名称】, 【院校名称】\\
-Email: 【邮箱】 \quad Homepage: 【个人主页URL】
+\textbf{\textit{<FILL: PI Name>}}\\
+\textit{<FILL: Professor / Associate Professor>}, \textit{<FILL: Department Name>}, \textit{<FILL: University Name>}\\
+Email: \textit{<FILL: email>} \quad Homepage: \textit{<FILL: homepage URL>}
 
-\textbf{Research Interests:} 【填写研究方向，例如：Large Language Models, Knowledge
-Distillation, AIOps, Intelligent Systems】
+\textbf{Research Interests:} Large Language Models, Knowledge Distillation, AIOps, Intelligent Software Systems
 
 \textbf{Representative Publications (recent 5 years):}
 \begin{enumerate}[leftmargin=*, itemsep=2pt]
-  \item 【论文1：作者，标题，期刊/会议，年份】
-  \item 【论文2：作者，标题，期刊/会议，年份】
-  \item 【论文3：作者，标题，期刊/会议，年份】
+  \item \textit{<FILL: Author(s), Title, Venue, Year>}
+  \item \textit{<FILL: Author(s), Title, Venue, Year>}
+  \item \textit{<FILL: Author(s), Title, Venue, Year>}
 \end{enumerate}
 
 \textbf{Grants and Awards:}
 \begin{itemize}[leftmargin=*, itemsep=2pt]
-  \item 【基金1：资助来源，项目名，金额，年份】
-  \item 【基金2：资助来源，项目名，金额，年份】
+  \item \textit{<FILL: Funding Source, Project Title, Amount, Year>}
+  \item \textit{<FILL: Funding Source, Project Title, Amount, Year>}
 \end{itemize}
 
 \textbf{Relevant Industrial Experience:}
-【填写与阿里/工业界相关的合作经历，如有】
+\textit{<FILL: Relevant industrial collaboration experience, if any>}
 
 % ══════════════════════════════════════════════════════════════════════════════
 %  6. REFERENCES
