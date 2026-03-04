@@ -18,7 +18,6 @@
 \usepackage{xcolor}
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric, arrows.meta, positioning, calc, fit, backgrounds}
-\usepackage{pgfgantt}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{hyperref}
@@ -227,15 +226,17 @@ $\langle$input, output$\rangle$ pairs into CoT-annotated training data \emph{wit
 any human annotation or domain-aware teacher model}.
 The key innovation is using the \emph{known answer as an automatic verifier}:
 
-\[
-\underbrace{\langle \text{query},\, \text{answer} \rangle}_{\text{available cold-start}}
-\;\xrightarrow{\text{medium LLM, }k\text{ samples}}\;
+{\small
+\begin{align*}
+\underbrace{\langle q,\, a \rangle}_{\text{cold-start data}}
+&\;\xrightarrow{\;\text{LLM},\;k\text{ samples}\;}\;
 \text{candidate CoTs}
-\;\xrightarrow{\text{answer-consistency filter}}\;
-\underbrace{\langle \text{query},\, \text{CoT}^*, \text{answer} \rangle}_{\text{verified triples}}
-\;\xrightarrow{\text{SLM fine-tune}}\;
-\text{specialist SLM}
-\]
+\;\xrightarrow{\;\text{answer filter}\;}\;
+\underbrace{\langle q,\, \text{CoT}^*,\, a \rangle}_{\text{verified triples}}
+\;\xrightarrow{\;\text{SFT+LoRA}\;}\;
+\underbrace{\text{specialist SLM}}_{\text{MCP endpoint}}
+\end{align*}}
+\noindent where $q$ = query, $a$ = ground-truth answer, CoT$^*$ = verified reasoning chain.
 
 A medium-sized model (e.g., Qwen3-7B) generates $k$ candidate reasoning chains per
 query via temperature sampling ($\tau{=}0.8$). Only chains whose final conclusion
@@ -486,28 +487,28 @@ AIOps sub-scenario within days, without labelling budget or pre-existing expert 
 \begin{table}[H]
 \centering
 \renewcommand{\arraystretch}{1.4}
-\begin{tabularx}{\linewidth}{l l r r r l l}
+\small
+\begin{tabular}{p{2.4cm} p{3.2cm} r r r p{1.6cm} p{1.6cm}}
 \toprule
-\textbf{Name} & \textbf{Profile} & \textbf{Expense} & \textbf{Period} &
+\textbf{Name} & \textbf{Profile} & \textbf{RMB/mo.} & \textbf{Period} &
 \textbf{Total} & \textbf{Role} & \textbf{Internship}\\
- & & \textbf{(RMB/mo.)} & & \textbf{(RMB)} & & \textbf{at Alibaba}\\
 \midrule
-\textit{<FILL: PI Name>} &
-  \textit{<FILL: Professor>}, \textit{<FILL: University Name>} &
-  12,000 & 3 months & 36,000 & PI & —\\
-\textit{<FILL: PhD Student 1 Name>} &
-  PhD Student, \textit{<FILL: University Name>} &
-  12,000 & 12 months & 144,000 & Research Asst. & Month 4--6\\
-\textit{<FILL: PhD Student 2 Name>} &
-  PhD Student, \textit{<FILL: University Name>} &
-  12,000 & 12 months & 144,000 & Research Asst. & Month 7--9\\
+\textit{<FILL: PI>} &
+  \textit{<FILL: Prof.>},\newline \textit{<FILL: Univ.>} &
+  12{,}000 & 3\,mo. & 36{,}000 & PI & ---\\
+\textit{<FILL: PhD 1>} &
+  PhD Student,\newline \textit{<FILL: Univ.>} &
+  12{,}000 & 12\,mo. & 144{,}000 & Research Asst. & Mo. 4--6\\
+\textit{<FILL: PhD 2>} &
+  PhD Student,\newline \textit{<FILL: Univ.>} &
+  12{,}000 & 12\,mo. & 144{,}000 & Research Asst. & Mo. 7--9\\
 \midrule
-\multicolumn{5}{r}{\textbf{Sub-total Personnel (a)}} & \multicolumn{2}{r}{\textbf{324,000}}\\
+\multicolumn{4}{r}{\textbf{Sub-total Personnel (a)}} & \multicolumn{3}{r}{\textbf{RMB 324{,}000}}\\
 \bottomrule
-\end{tabularx}
+\end{tabular}
 \end{table}
 
-\noindent\small\textit{Note: Internship periods are indicative; exact dates subject to Alibaba SRE team schedule.}
+\noindent\small\textit{Internship periods are indicative; exact dates subject to Alibaba SRE team schedule.}
 
 \subsection{Equipment \& Supplies}
 

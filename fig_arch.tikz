@@ -2,11 +2,11 @@
 \begin{tikzpicture}[font=\small, node distance=0.5cm and 0.6cm]
 
 % ── Layer 0: Fault event input ────────────────────────────────────────────────
-\node[box=10cm, minimum height=0.65cm] (input)
+\node[box=9.5cm, minimum height=0.65cm] (input)
   {Incoming Fault Event: alerts + logs};
 
 % ── Layer 1: Cloud Planner ────────────────────────────────────────────────────
-\node[greybox=10cm, minimum height=1.0cm, below=0.5cm of input] (planner)
+\node[greybox=9.5cm, minimum height=1.0cm, below=0.5cm of input] (planner)
   {\textbf{Cloud LLM Planner} (Qwen3-72B)\\
    \footnotesize Decomposes task $\to$ selects \& sequences MCP tools};
 
@@ -28,7 +28,7 @@
   {\ldots\\new domain};
 
 % ── Layer 3: MOLE1 production ────────────────────────────────────────────────
-\node[box=10cm, minimum height=0.9cm,
+\node[box=9.5cm, minimum height=0.9cm,
       below=0.7cm of t2, xshift=0.6cm] (mole)
   {\textbf{MOLE1 Production Pipeline}
    (Stage 1–4: data harvest $\to$ CoT synthesis $\to$ filter $\to$ SLM train)};
@@ -51,10 +51,10 @@
   $\longrightarrow$ runtime call \quad
   $--\!\!>$ model production (offline)};
 
-% ── Latency annotation ────────────────────────────────────────────────────────
-\node[right=0.3cm of planner, align=left, font=\footnotesize\itshape,
-      text width=2.5cm] {cloud API\\$\sim$500\,ms};
-\node[right=0.3cm of t3, align=left, font=\footnotesize\itshape,
-      text width=2.2cm] {local SLM\\$<$100\,ms};
+% ── Latency annotation (inside boxes, below text) ─────────────────────────────
+\node[below=0.05cm of planner, font=\footnotesize\itshape, text=gray]
+  {cloud API $\sim$500\,ms};
+\node[below=0.05cm of mcplabel, font=\footnotesize\itshape, text=gray]
+  {local inference $<$100\,ms};
 
 \end{tikzpicture}

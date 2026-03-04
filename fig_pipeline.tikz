@@ -44,9 +44,10 @@
 \draw[dasharrow] (filt.north) -- (s3.south);
 
 % ── Discard annotation ────────────────────────────────────────────────────────
-\node[above=0.5cm of s3, align=center, font=\footnotesize,
-      text width=3.0cm] (disc)
-  {\textit{Rejected CoTs discarded}};
-\draw[->, thick, dashed, gray] (s3.north) -- (disc.south);
+\node[below=0.5cm of s2, align=center, font=\footnotesize,
+      draw=gray!60, rounded corners=2pt, fill=white,
+      text width=2.8cm, minimum height=0.5cm, text=gray] (disc)
+  {\textit{Rejected CoTs}\\[-1pt]\textit{(discarded)}};
+\draw[->, dashed, gray] (s3.south) to[out=250,in=0] (disc.east);
 
 \end{tikzpicture}
