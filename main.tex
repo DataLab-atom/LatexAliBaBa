@@ -209,6 +209,11 @@ This project pursues four tightly coupled objectives:
         Provide rigorous empirical and theoretical analysis explaining \emph{why} a
         domain-focused SLM can outperform a general LLM on targeted tasks (the
         ``specialisation beats generalisation'' phenomenon).
+  \item \textbf{Cross-domain transfer study.}
+        Validate MOLE1's domain generality by applying the identical pipeline to at
+        least one additional domain beyond AIOps (e.g., code-review classification or
+        customer-service triage), demonstrating that the method's value is not
+        scenario-specific.
 \end{enumerate}
 
 % ──────────────────────────────────────────────────────────────────────────────
@@ -287,10 +292,12 @@ Figure~\ref{fig:pipeline} shows the complete MOLE1 pipeline.
 
 \textbf{Dataset.}
 We use a combination of (a) a proprietary AIOps dataset from Alibaba operational
-logs (subject to data-sharing agreement) and (b) the publicly available
-AIOps-2022 benchmark \citep{aiops} for reproducibility.
+logs (subject to a mutually agreed data-sharing protocol with Alibaba's SRE team)
+and (b) the publicly available AIOps-2022 benchmark \citep{aiops} for reproducibility.
 Experiments cover three AIOps sub-scenarios: database-layer faults, network
 partition events, and container resource exhaustion.
+A cross-domain transfer experiment on a public code-review dataset will validate
+MOLE1's domain generality (Objective O5).
 
 \textbf{Baselines.}
 \begin{itemize}[itemsep=1pt]
@@ -465,26 +472,28 @@ AIOps sub-scenario within days, without labelling budget or pre-existing expert 
 \begin{table}[H]
 \centering
 \renewcommand{\arraystretch}{1.4}
-\begin{tabularx}{\linewidth}{l l r r r l}
+\begin{tabularx}{\linewidth}{l l r r r l l}
 \toprule
 \textbf{Name} & \textbf{Profile} & \textbf{Expense} & \textbf{Period} &
-\textbf{Total} & \textbf{Role}\\
- & & \textbf{(RMB/mo.)} & & \textbf{(RMB)} & \\
+\textbf{Total} & \textbf{Role} & \textbf{Internship}\\
+ & & \textbf{(RMB/mo.)} & & \textbf{(RMB)} & & \textbf{at Alibaba}\\
 \midrule
 \textit{<FILL: PI Name>} &
   \textit{<FILL: Professor>}, \textit{<FILL: University Name>} &
-  12,000 & 3 months & 36,000 & PI\\
+  12,000 & 3 months & 36,000 & PI & —\\
 \textit{<FILL: PhD Student 1 Name>} &
   PhD Student, \textit{<FILL: University Name>} &
-  12,000 & 12 months & 144,000 & Research Assistant\\
+  12,000 & 12 months & 144,000 & Research Asst. & Month 4--6\\
 \textit{<FILL: PhD Student 2 Name>} &
   PhD Student, \textit{<FILL: University Name>} &
-  12,000 & 12 months & 144,000 & Research Assistant\\
+  12,000 & 12 months & 144,000 & Research Asst. & Month 7--9\\
 \midrule
-\multicolumn{4}{r}{\textbf{Sub-total Personnel (a)}} & \textbf{324,000} & \\
+\multicolumn{5}{r}{\textbf{Sub-total Personnel (a)}} & \multicolumn{2}{r}{\textbf{324,000}}\\
 \bottomrule
 \end{tabularx}
 \end{table}
+
+\noindent\small\textit{Note: Internship periods are indicative; exact dates subject to Alibaba SRE team schedule.}
 
 \subsection{Equipment \& Supplies}
 
