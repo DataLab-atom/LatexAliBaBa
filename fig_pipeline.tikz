@@ -1,0 +1,52 @@
+% Figure 2: MOLE1 four-stage pipeline
+\begin{tikzpicture}[node distance=0.6cm and 0.7cm, font=\small]
+
+% ── Stage boxes ───────────────────────────────────────────────────────────────
+\node[box=3.0cm, minimum height=1.5cm] (s1) {%
+  \textbf{Stage 1}\\[2pt]
+  Data Harvesting\\
+  \footnotesize (operational logs)};
+
+\node[box=3.0cm, minimum height=1.5cm, right=0.8cm of s1] (s2) {%
+  \textbf{Stage 2}\\[2pt]
+  CoT Candidate\\Generation\\
+  \footnotesize (Qwen3-7B, $k$ samples)};
+
+\node[box=3.0cm, minimum height=1.5cm, right=0.8cm of s2] (s3) {%
+  \textbf{Stage 3}\\[2pt]
+  Answer-Verification\\Filter\\
+  \footnotesize (keep if CoT $\to$ correct ans.)};
+
+\node[box=3.0cm, minimum height=1.5cm, right=0.8cm of s3] (s4) {%
+  \textbf{Stage 4}\\[2pt]
+  SLM Fine-Tuning\\+ MCP Packaging\\
+  \footnotesize (LoRA; MCP endpoint)};
+
+% ── Arrows ───────────────────────────────────────────────────────────────────
+\draw[arrow] (s1) -- (s2);
+\draw[arrow] (s2) -- (s3);
+\draw[arrow] (s3) -- (s4);
+
+% ── Input / output labels ─────────────────────────────────────────────────────
+\node[left=0.4cm of s1, align=right, font=\footnotesize] (inp)
+  {$\langle$query,\\answer$\rangle$};
+\draw[arrow] (inp) -- (s1);
+
+\node[right=0.4cm of s4, align=left, font=\footnotesize] (out)
+  {Specialist\\SLM (MCP)};
+\draw[arrow] (s4) -- (out);
+
+% ── Filter annotation ─────────────────────────────────────────────────────────
+\node[below=0.5cm of s3, align=center, font=\footnotesize,
+      draw=black, rounded corners=2pt, fill=white,
+      text width=3.0cm, minimum height=0.6cm] (filt)
+  {\textit{Auto-verifier: no\\human in the loop}};
+\draw[dasharrow] (filt.north) -- (s3.south);
+
+% ── Discard annotation ────────────────────────────────────────────────────────
+\node[above=0.5cm of s3, align=center, font=\footnotesize,
+      text width=3.0cm] (disc)
+  {\textit{Rejected CoTs discarded}};
+\draw[->, thick, dashed, gray] (s3.north) -- (disc.south);
+
+\end{tikzpicture}

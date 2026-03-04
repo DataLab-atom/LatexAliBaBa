@@ -1,0 +1,49 @@
+% Figure 4: Gantt chart
+\begin{tikzpicture}[font=\small]
+\begin{ganttchart}[
+    hgrid,
+    vgrid={*{2}{dotted}, *{1}{dashed}},
+    x unit=0.88cm,
+    y unit title=0.55cm,
+    y unit chart=0.60cm,
+    title height=1,
+    bar height=0.55,
+    bar label font=\footnotesize,
+    title label font=\footnotesize\bfseries,
+    milestone label font=\footnotesize\itshape,
+    bar/.style={fill=black!25, draw=black},
+    milestone/.style={fill=black, draw=black, shape=diamond},
+    link/.style={->, thick},
+  ]{1}{12}
+
+  % Month labels
+  \gantttitle{Month}{12}\\
+  \gantttitlelist{1,...,12}{1}\\
+
+  % M1
+  \ganttbar{Stage 1: Data Harvesting}{1}{3}\\
+  \ganttmilestone{M1: Dataset + Filter}{3}\\[grid]
+
+  % M2
+  \ganttbar{Stage 2: CoT Generation}{2}{5}\\
+  \ganttbar{Stage 3: SLM Training}{4}{7}\\
+  \ganttmilestone{M2: Trained SLMs + Paper \#1 draft}{7}\\[grid]
+
+  % M3
+  \ganttbar{Stage 4: MCP Packaging}{7}{9}\\
+  \ganttbar{System Integration \& Eval}{8}{9}\\
+  \ganttmilestone{M3: MCP Toolkit + Paper \#2 draft}{9}\\[grid]
+
+  % M4
+  \ganttbar{Full Evaluation \& User Study}{10}{11}\\
+  \ganttbar{Patent Filing + Final Report}{10}{12}\\
+  \ganttmilestone{M4: All Deliverables}{12}\\
+
+  % Dependencies
+  \ganttlink{elem0}{elem2}
+  \ganttlink{elem2}{elem4}
+  \ganttlink{elem4}{elem7}
+  \ganttlink{elem7}{elem10}
+
+\end{ganttchart}
+\end{tikzpicture}
