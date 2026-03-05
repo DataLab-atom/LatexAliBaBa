@@ -155,6 +155,33 @@ This gap motivates our core proposal: an automated pipeline that generates
 CoT-annotated training data \emph{from raw} $\langle$\emph{input, output}$\rangle$
 \emph{pairs alone}, requiring no human intervention and no domain-aware teacher.
 
+\textbf{Existing problems and difficulties.}
+
+\textbf{(1) Specialist SLM production has ``no automated path'' at cold-start.}
+Existing LLM--SLM collaboration frameworks treat specialist small models as a
+\emph{given}: FrugalGPT, RouteLLM, and related work contribute routing or
+scheduling policies, but not a method for producing the executors themselves.
+In practice, a new AIOps sub-scenario (e.g., a newly introduced service mesh or
+a novel microservice fault type) begins with zero labelled data and zero
+pre-trained domain model. Without an automated way to produce specialist SLMs
+from scratch, the entire collaboration stack has no executor to route to.
+How to build a fully automated, annotation-free SLM production pipeline that
+starts from raw operational records alone is the first core challenge.
+
+\textbf{(2) Answer-verified CoT synthesis remains ``unsolved'' for industrial domains.}
+CoT-based distillation—STaR \citep{star}, Distilling Step-by-Step \citep{dss}—has
+convincingly demonstrated that reasoning-chain training yields far more capable
+SLMs than standard input--output fine-tuning. However, generating \emph{verified}
+CoT annotations requires knowing whether each chain leads to the correct answer,
+which in turn requires either human evaluators or a domain-expert teacher model.
+At cold-start, neither resource exists. How to verify candidate reasoning chains
+automatically—using only the ground-truth answer already present in historical
+records—without any domain-specific supervision, and how to do so in a way that
+generalises across industrial AIOps sub-scenarios, is the second core challenge.
+
+This project tackles both problems simultaneously through the MOLE1 pipeline,
+using Alibaba's AIOps operational data as the primary validation environment.
+
 \begin{figure}[H]
 \centering
 \input{fig_gap.tikz}
@@ -214,6 +241,15 @@ This project pursues four tightly coupled objectives:
         customer-service triage), demonstrating that the method's value is not
         scenario-specific.
 \end{enumerate}
+
+\noindent\textbf{Quantified targets:}
+SLMs produced by MOLE1 should achieve remediation-action accuracy within 5\% of
+GPT-4-class LLMs on AIOps fault-diagnosis benchmarks, reduce per-inference latency
+by $>$10$\times$ (from $\sim$1\,s to $<$100\,ms), and reduce per-query token cost
+to zero (local inference).
+Academic output: 2 papers at CCF-A or equivalent top venues (e.g., NeurIPS, ICML,
+ICSE, FSE); 1--2 invention patents on cold-start CoT synthesis and MCP endpoint
+packaging; system deployed in 3+ Alibaba AIOps business scenarios.
 
 % ──────────────────────────────────────────────────────────────────────────────
 \subsection{Development Method}
@@ -372,6 +408,51 @@ enabling zero-latency local inference without GPU scheduling;
 (3) \emph{cost}: 1.5B inference costs $\approx$5$\times$ fewer FLOPs than 7B,
 critical for high-frequency fault monitoring (thousands of events per minute).
 
+\subsubsection*{Technical Advantages}
+
+Comparing MOLE1 against existing LLM--SLM collaboration and SLM distillation methods:
+
+\begin{enumerate}[leftmargin=*, itemsep=4pt]
+  \item \textbf{Novelty.}
+        Existing LLM--SLM collaboration frameworks (FrugalGPT, RouteLLM) assume
+        specialist SLMs pre-exist and focus entirely on routing policy.
+        Existing CoT distillation methods (STaR, Distilling Step-by-Step) require
+        human-annotated CoT or a domain-aware teacher model.
+        MOLE1 is the first to close the cold-start gap: automated specialist SLM
+        production with \emph{no human annotation and no domain-aware teacher}, using
+        only the ground-truth answer already present in historical records as verifier.
+        This fills a critical blind spot in both lines of research.
+  \item \textbf{Deployability.}
+        The pipeline design is operationally transparent: collect historical records,
+        run temperature-sampled CoT generation, filter by answer match, fine-tune with
+        LoRA, and register as an MCP endpoint.
+        Any Alibaba SRE team can apply the pipeline to a new AIOps sub-scenario within
+        days, without ML expertise or labelling budget.
+        The MCP-compliant packaging ensures plug-and-play integration with existing
+        Planner infrastructure.
+  \item \textbf{Effectiveness.}
+        Domain-specific CoT training produces SLMs that match or exceed GPT-4-class
+        LLMs on narrow tasks despite orders-of-magnitude fewer parameters—a
+        well-established finding from the distillation literature \citep{dss,ddk} that
+        MOLE1 extends to the cold-start, answer-verification regime.
+        Empirical and theoretical analysis of the ``specialisation beats generalisation''
+        phenomenon will be provided as part of the project output.
+  \item \textbf{Efficiency.}
+        MOLE1 adds zero labelling overhead and consumes a fraction of the compute
+        required to train or query a general LLM.
+        Inference-time savings are immediate: local SLM execution ($<$100\,ms)
+        eliminates cloud API cost and latency for high-frequency AIOps monitoring tasks.
+        The pipeline overhead is far smaller than the LLM API costs it replaces.
+  \item \textbf{Generality.}
+        MOLE1 requires only historical $\langle$input, output$\rangle$ pairs with
+        automatically verifiable answers—a condition that holds across a wide range of
+        industrial domains (customer-service triage, code-review classification,
+        supply-chain anomaly detection).
+        After the design is complete, it can be extended to multiple Alibaba business
+        lines without domain-specific re-engineering, making it a broadly reusable
+        cold-start asset well beyond the AIOps instantiation demonstrated here.
+\end{enumerate}
+
 % ══════════════════════════════════════════════════════════════════════════════
 %  2. MILESTONE
 % ══════════════════════════════════════════════════════════════════════════════
@@ -441,8 +522,45 @@ M4 &
 
 The following final deliverables are committed for this project.
 
+\begin{enumerate}[leftmargin=*, itemsep=4pt]
+  \item \textbf{Algorithm prototype system.}
+        Complete MOLE1 cold-start SLM production pipeline: data harvesting module,
+        CoT candidate generation, answer-verification filter, SLM fine-tuning (SFT +
+        LoRA), and MCP endpoint packaging. Source code released open-source on GitHub;
+        fully reproducible experimental environment provided.
+  \item \textbf{MCP-compliant AIOps tool-endpoint toolkit.}
+        Packaged SLM executors for 3+ AIOps sub-scenarios (database-layer faults,
+        network partition events, container resource exhaustion), with documentation
+        and integration guide for the Planner layer.
+  \item \textbf{Design documents.}
+        Submit 1 overview design document (system architecture and pipeline specification)
+        and 1 detailed design document (algorithm, evaluation protocol, and
+        deployment guide).
+  \item \textbf{Paper targets.}
+        Publish 2 papers at CCF-A or equivalent top venues (e.g., NeurIPS, ICML, ACL,
+        ICSE, FSE), covering MOLE1 methodology and AIOps evaluation results.
+  \item \textbf{Patent targets.}
+        Submit 1--2 invention patent applications on cold-start CoT synthesis and
+        MCP endpoint packaging (China or international).
+  \item \textbf{Technical targets.}
+        Compared with existing AIOps approaches: SLMs produced by MOLE1 achieve
+        remediation-action accuracy within 5\% of GPT-4-class LLMs, reduce
+        per-inference latency by $>$10$\times$ (from $\sim$1\,s to $<$100\,ms),
+        and reduce per-query token cost to zero (local inference).
+  \item \textbf{Business targets.}
+        System deployed and launched in 3+ Alibaba AIOps business scenarios, with
+        documented performance improvement relative to LLM-only baseline.
+  \item \textbf{Project acceptance report.}
+        Submit 1 final acceptance test report at project conclusion.
+  \item \textbf{Student co-training and internship.}
+        Jointly train 2--3 graduate students participating in this project; provide
+        Alibaba SRE team internship opportunities during the project period
+        (indicative: Months 4--9, subject to Alibaba schedule).
+\end{enumerate}
+
 \begin{table}[H]
 \centering
+\caption{Summary of deliverables and delivery mode.}
 \renewcommand{\arraystretch}{1.4}
 \begin{tabularx}{\linewidth}{X l p{4.8cm}}
 \toprule
@@ -454,28 +572,24 @@ Prototype system: MOLE1 cold-start SLM production pipeline &
 MCP-compliant AIOps tool-endpoint toolkit &
   Source code + documentation &
   Compatible with standard MCP protocol \\
-2–3 academic papers on MOLE1 methodology and AIOps evaluation &
+Overview and detailed design documents &
+  Technical reports &
+  Submitted at M1 and M3 milestones \\
+2 academic papers on MOLE1 methodology and AIOps evaluation &
   Academic papers &
-  Targeting CCF-A or equivalent top venues
-  (e.g., NeurIPS, ICML, ACL, ICSE, FSE) \\
-1–2 invention patents on cold-start CoT synthesis and MCP packaging &
+  Targeting CCF-A or equivalent top venues \\
+1--2 invention patents on cold-start CoT synthesis and MCP packaging &
   Patent applications &
-  International or China patents \\
-Interim reports (kick-off, mid-term, final) &
+  China or international patents \\
+Interim and final project reports &
   Project reports &
   Submitted per agreed schedule \\
+Graduate student internship at Alibaba &
+  Personnel arrangement &
+  2--3 PhD students; Months 4--9 (indicative) \\
 \bottomrule
 \end{tabularx}
 \end{table}
-
-\noindent\textbf{Expected technical improvement:}
-SLMs produced by MOLE1 are expected to achieve accuracy within 5\% of GPT-4-class
-LLMs on AIOps fault-diagnosis benchmarks while reducing per-inference latency
-by $>$10$\times$ (from $\sim$1\,s to $<$100\,ms) and token cost to zero (local inference).
-
-\noindent\textbf{Expected business value for Alibaba:}
-A reusable, domain-agnostic pipeline that Alibaba SRE teams can apply to any new
-AIOps sub-scenario within days, without labelling budget or pre-existing expert models.
 
 % ══════════════════════════════════════════════════════════════════════════════
 %  4. HUMAN RESOURCES, EQUIPMENT AND BUDGET
@@ -558,27 +672,64 @@ Open-access publication fees & 10,000 & 20,000 &
 % ══════════════════════════════════════════════════════════════════════════════
 \section{Biographical Sketches of Principal Investigator(s)}
 
-\textbf{\textit{<FILL: PI Name>}}\\
-\textit{<FILL: Professor / Associate Professor>}, \textit{<FILL: Department Name>}, \textit{<FILL: University Name>}\\
-Email: \textit{<FILL: email>} \quad Homepage: \textit{<FILL: homepage URL>}
+\textbf{\textit{<FILL: PI Full Name>}}\\
+\textit{<FILL: Professor / Associate Professor / Tenure-track Assistant Professor>},
+\textit{<FILL: Department / School Name>},
+\textit{<FILL: University Full Name>}\\
+Email: \textit{<FILL: pi@university.edu>} \quad
+Homepage: \textit{<FILL: https://pi-homepage-url>}
 
-\textbf{Research Interests:} Large Language Models, Knowledge Distillation, AIOps, Intelligent Software Systems
+\textbf{Education:}
+\begin{itemize}[leftmargin=*, itemsep=1pt]
+  \item PhD, \textit{<FILL: Dept., University>}
+        (Advisor: Prof.\ \textit{<FILL: Advisor Name>})
+  \item MS/BEng, \textit{<FILL: Dept., University>}
+\end{itemize}
+
+\textbf{Research Interests:}
+Large Language Models, Knowledge Distillation, AIOps and Intelligent Operations,
+Automated Machine Learning, Intelligent Software Systems.
 
 \textbf{Representative Publications (recent 5 years):}
 \begin{enumerate}[leftmargin=*, itemsep=2pt]
-  \item \textit{<FILL: Author(s), Title, Venue, Year>}
-  \item \textit{<FILL: Author(s), Title, Venue, Year>}
-  \item \textit{<FILL: Author(s), Title, Venue, Year>}
+  \item \textit{<FILL: Author(s). ``Title.'' Venue (CCF-A / top venue), Year.
+        [Note role: first author / corresponding author]>}
+  \item \textit{<FILL: Author(s). ``Title.'' Venue (CCF-A / top venue), Year.>}
+  \item \textit{<FILL: Author(s). ``Title.'' Venue (CCF-A / top venue), Year.>}
+  \item \textit{<FILL: Author(s). ``Title.'' Venue (CCF-A / top venue), Year.>}
+  \item \textit{<FILL: Author(s). ``Title.'' Venue (CCF-A / top venue), Year.>}
 \end{enumerate}
 
-\textbf{Grants and Awards:}
+\textbf{Selected Grants and Awards:}
 \begin{itemize}[leftmargin=*, itemsep=2pt]
-  \item \textit{<FILL: Funding Source, Project Title, Amount, Year>}
-  \item \textit{<FILL: Funding Source, Project Title, Amount, Year>}
+  \item \textit{<FILL: Funding body, Project title, Total amount (RMB/USD), Role (PI/Co-PI), Year(s)>}
+  \item \textit{<FILL: Funding body, Project title, Total amount, Role, Year(s)>}
+  \item \textit{<FILL: Award name, Awarding body, Year>}
 \end{itemize}
 
-\textbf{Relevant Industrial Experience:}
-\textit{<FILL: Relevant industrial collaboration experience, if any>}
+\textbf{Academic Service:}
+\begin{itemize}[leftmargin=*, itemsep=1pt]
+  \item (Senior) PC Member / Reviewer:
+        \textit{<FILL: list top venues, e.g., NeurIPS, ICML, ACL, ICSE, FSE, KDD>}
+  \item \textit{<FILL: Tutorial speaker / Workshop organiser at top venue, Year>}
+\end{itemize}
+
+\medskip
+\noindent\textbf{Note: Specific Relevant Experience for This Proposal.}
+
+\begin{enumerate}[leftmargin=*, itemsep=3pt]
+  \item \textit{<FILL: ``Published N papers directly in this direction at [list CCF-A venues with years], of which N are as first or corresponding author.
+        Representative papers: [1] \ldots\ [2] \ldots''>}
+  \item \textit{<FILL: ``During [company] research collaboration / internship ([duration]),
+        was main member of [project name], an [LLM distillation / AIOps / AutoML]-based
+        system.  Led deployment of [specific model/component] across [N] business lines
+        ([list product names]), achieving [concrete quantified result, e.g., ``50\% latency
+        reduction'' or ``X\% accuracy improvement on fault diagnosis''].''>}
+  \item \textit{<FILL: ``Gave [tutorial / invited talk] on [relevant topic, e.g.,
+        ``LLM--SLM collaboration'' or ``automated AIOps''] at CCF-A conference(s)
+        [list venues and years], receiving [wide attention / positive reviews].
+        Authored survey paper [title, arXiv/venue, year] on the topic.''>}
+\end{enumerate}
 
 % ══════════════════════════════════════════════════════════════════════════════
 %  6. REFERENCES
