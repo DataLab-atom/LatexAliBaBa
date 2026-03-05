@@ -1,49 +1,49 @@
-% Figure 1: Gap comparison — existing methods vs MOLE1
+% 图1：研究空白对比——现有方法 vs MOLE1
 \begin{tikzpicture}[node distance=0.5cm and 1.2cm, font=\small]
 
-% ── Left column: Existing methods ────────────────────────────────────────────
+% ── 左列：现有方法 ────────────────────────────────────────────────────────────
 \node[box=4.5cm, minimum height=0.7cm] (e1)
-  {\textbf{Existing SLM-Production Methods}};
+  {\textbf{现有 SLM 生产方法}};
 
 \node[greybox=4.5cm, below=0.35cm of e1] (e2)
-  {Human-labelled CoT\\(expensive, slow)};
+  {人工标注 CoT\\（昂贵、缓慢）};
 \node[greybox=4.5cm, below=0.35cm of e2] (e3)
-  {Domain-aware teacher LLM\\(requires prior knowledge)};
+  {具备领域知识的教师 LLM\\（需先验知识）};
 \node[greybox=4.5cm, below=0.35cm of e3] (e4)
-  {Pre-existing student model\\(chicken-and-egg)};
+  {已有学生模型\\（先有鸡还是先有蛋）};
 
 \node[box=4.5cm, minimum height=0.7cm, below=0.35cm of e4,
       draw=black, fill=black!8] (efail)
-  {\textbf{Cold-Start: All Prerequisites Missing}\\
-   $\Rightarrow$ \textit{Pipeline cannot start}};
+  {\textbf{冷启动：所有前提均不成立}\\
+   $\Rightarrow$ \textit{流水线无法启动}};
 
-% ── Right column: MOLE1 ──────────────────────────────────────────────────────
+% ── 右列：MOLE1 ──────────────────────────────────────────────────────────────
 \node[box=4.5cm, minimum height=0.7cm, right=1.6cm of e1] (m1)
-  {\textbf{MOLE1 (Proposed)}};
+  {\textbf{MOLE1（本方案）}};
 
 \node[greybox=4.5cm, below=0.35cm of m1] (m2)
-  {Raw $\langle$query, answer$\rangle$ pairs\\(from existing logs — free)};
+  {原始 $\langle$查询, 答案$\rangle$ 对\\（来自现有日志——无额外成本）};
 \node[greybox=4.5cm, below=0.35cm of m2] (m3)
-  {Medium LLM generates\\candidate CoT traces};
+  {中型 LLM 生成\\候选 CoT 推理链};
 \node[greybox=4.5cm, below=0.35cm of m3] (m4)
-  {\textbf{Answer-verification filter}\\(ground-truth answer as verifier)};
+  {\textbf{答案验证过滤器}\\（以标准答案作为验证器）};
 
 \node[box=4.5cm, minimum height=0.7cm, below=0.35cm of m4,
       draw=black!70, fill=black!4] (mok)
-  {Verified CoT triples $\rightarrow$ SLM training\\
-   $\Rightarrow$ \textit{No human annotation needed}};
+  {经验证的 CoT 三元组 $\rightarrow$ SLM 训练\\
+   $\Rightarrow$ \textit{无需人工标注}};
 
-% ── Vertical flow arrows (right column) ──────────────────────────────────────
+% ── 右列流向箭头 ──────────────────────────────────────────────────────────────
 \draw[arrow] (m2) -- (m3);
 \draw[arrow] (m3) -- (m4);
 \draw[arrow] (m4) -- (mok);
 
-% ── Separator line ────────────────────────────────────────────────────────────
+% ── 分隔线 ────────────────────────────────────────────────────────────────────
 \draw[thick, dashed] ($(e1.north east)!0.5!(m1.north west)$)
   -- ($(efail.south east)!0.5!(mok.south west)$);
 
-% ── Column labels ─────────────────────────────────────────────────────────────
-\node[above=0.15cm of e1, font=\small\bfseries] {Prior Work};
-\node[above=0.15cm of m1, font=\small\bfseries] {This Work};
+% ── 列标签 ────────────────────────────────────────────────────────────────────
+\node[above=0.15cm of e1, font=\small\bfseries] {已有工作};
+\node[above=0.15cm of m1, font=\small\bfseries] {本工作};
 
 \end{tikzpicture}

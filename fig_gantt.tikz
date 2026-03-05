@@ -1,63 +1,63 @@
-% Figure 4: Gantt chart (pure TikZ — no pgfgantt dependency)
+% 图4：甘特图（纯 TikZ——无需 pgfgantt 依赖）
 \begin{tikzpicture}[font=\small, x=0.78cm, y=0.65cm]
 
-% ── Grid parameters ───────────────────────────────────────────────────────────
+% ── 网格参数 ───────────────────────────────────────────────────────────────────
 \def\nmonths{12}
 \def\nrows{4}
 
-% ── Month header ──────────────────────────────────────────────────────────────
+% ── 月份表头 ───────────────────────────────────────────────────────────────────
 \foreach \m in {1,...,12}{
   \draw[gray!40] (\m,0) -- (\m,-\nrows-0.5);
   \node[above, font=\footnotesize] at (\m-0.5, 0) {\m};
 }
 \draw[gray!40] (0,0) -- (0,-\nrows-0.5);
 \draw[thick] (0,0) -- (12,0);
-\node[above, font=\footnotesize\bfseries] at (6, 0.35) {Month};
+\node[above, font=\footnotesize\bfseries] at (6, 0.35) {月份};
 
-% ── Row labels ────────────────────────────────────────────────────────────────
+% ── 行标签 ────────────────────────────────────────────────────────────────────
 \node[left=0.1cm, align=right, font=\footnotesize, text width=3.2cm] at (0,-0.5)
-  {\textbf{M1:} Data \& Filter};
+  {\textbf{M1：}数据与过滤};
 \node[left=0.1cm, align=right, font=\footnotesize, text width=3.2cm] at (0,-1.5)
-  {\textbf{M2:} SLM Training};
+  {\textbf{M2：}SLM 训练};
 \node[left=0.1cm, align=right, font=\footnotesize, text width=3.2cm] at (0,-2.5)
-  {\textbf{M3:} MCP System};
+  {\textbf{M3：}MCP 系统};
 \node[left=0.1cm, align=right, font=\footnotesize, text width=3.2cm] at (0,-3.5)
-  {\textbf{M4:} Final Deliverables};
+  {\textbf{M4：}最终交付};
 
-% ── Gantt bars ────────────────────────────────────────────────────────────────
-% M1: months 1-3
+% ── 甘特条 ────────────────────────────────────────────────────────────────────
+% M1：第 1-3 月
 \fill[black!20, draw=black, thick] (0,-0.15) rectangle (3,-0.85);
-\node[font=\footnotesize] at (1.5,-0.5) {Data Harvesting};
+\node[font=\footnotesize] at (1.5,-0.5) {数据采集};
 
-% M2: months 2-7 (CoT gen + SLM training)
+% M2：第 2-7 月（CoT 生成 + SLM 训练）
 \fill[black!20, draw=black, thick] (1,-1.15) rectangle (7,-1.85);
-\node[font=\footnotesize] at (4,-1.5) {CoT Gen + SLM Training};
+\node[font=\footnotesize] at (4,-1.5) {CoT 生成 + SLM 训练};
 
-% M3: months 7-9
+% M3：第 7-9 月
 \fill[black!20, draw=black, thick] (6,-2.15) rectangle (9,-2.85);
-\node[font=\footnotesize] at (7.5,-2.5) {MCP Integration};
+\node[font=\footnotesize] at (7.5,-2.5) {MCP 集成};
 
-% M4: months 10-12
+% M4：第 10-12 月
 \fill[black!20, draw=black, thick] (9,-3.15) rectangle (12,-3.85);
-\node[font=\footnotesize] at (10.5,-3.5) {Evaluation \& Delivery};
+\node[font=\footnotesize] at (10.5,-3.5) {评估与交付};
 
-% ── Milestone diamonds ────────────────────────────────────────────────────────
+% ── 里程碑菱形 ────────────────────────────────────────────────────────────────
 \node[diamond, draw=black, fill=black, inner sep=1.8pt] at (3,-0.5) {};
 \node[diamond, draw=black, fill=black, inner sep=1.8pt] at (7,-1.5) {};
 \node[diamond, draw=black, fill=black, inner sep=1.8pt] at (9,-2.5) {};
 \node[diamond, draw=black, fill=black, inner sep=1.8pt] at (12,-3.5) {};
 
-% ── Milestone labels (above) ──────────────────────────────────────────────────
+% ── 里程碑标签（上方）────────────────────────────────────────────────────────
 \node[above=0.08cm, font=\scriptsize] at (3,-0.15) {M1};
 \node[above=0.08cm, font=\scriptsize] at (7,-1.15) {M2};
 \node[above=0.08cm, font=\scriptsize] at (9,-2.15) {M3};
 \node[above=0.08cm, font=\scriptsize] at (12,-3.15) {M4};
 
-% ── Cross-domain bar (dashed, M2 extension) ──────────────────────────────────
+% ── 跨域迁移条（虚线，M2 延伸）──────────────────────────────────────────────
 \draw[thick, dashed] (7,-1.15) rectangle (10,-1.85);
-\node[font=\tiny, align=center] at (8.5,-1.5) {Cross-domain\\(O5)};
+\node[font=\tiny, align=center] at (8.5,-1.5) {跨域\\（O5）};
 
-% ── Border ────────────────────────────────────────────────────────────────────
+% ── 边框 ──────────────────────────────────────────────────────────────────────
 \draw[thick] (0,-\nrows-0.1) -- (12,-\nrows-0.1);
 \draw[thick] (0,0) rectangle (12,-\nrows-0.1);
 
