@@ -34,13 +34,13 @@
 \node[greybox=\bw, minimum height=0.65cm, below=0.2cm of m2] (m3)
   {\textbf{标准答案}作为验证器，自动过滤};
 
-\draw[arrow] (m1) -- (m2);
-\draw[arrow] (m2) -- (m3);
-\draw[arrow] (m3.south) -- ++(0,-0.5);
-
 \node[box=\bw, minimum height=0.72cm, below=0.5cm of m3,
       fill=black!4, draw=black!55] (mok)
   {$\checkmark$\enspace\textbf{无需标注，自动产出专家 SLM}};
+
+\draw[arrow] (m1) -- (m2);
+\draw[arrow] (m2) -- (m3);
+\draw[arrow] (m3.south) -- (mok.north);
 
 % ── 列头上方标签 ──────────────────────────────────────────────────────────────
 \node[above=0.15cm of lh, font=\small\bfseries] {已有工作};

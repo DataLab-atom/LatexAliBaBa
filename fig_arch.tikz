@@ -16,15 +16,15 @@
   {本地 MCP 工具层\enspace{\normalfont\footnotesize\itshape\textcolor{black!50}{延迟 $<$100\,ms}}};
 
 % ── 第三层：MCP 工具端点 ──────────────────────────────────────────────────────
-\node[box=2.7cm, minimum height=1.05cm, below=0.3cm of mcplabel] (t1)
-  {\textbf{数据库故障}\\SLM\,(1.8B)};
-\node[box=2.7cm, minimum height=1.05cm, right=0.4cm of t1] (t2)
+\node[box=2.6cm, minimum height=1.05cm, below=0.3cm of mcplabel] (t1)
+  {\textbf{数据库故障}\\SLM\,(1.5B)};
+\node[box=2.6cm, minimum height=1.05cm, right=0.4cm of t1] (t2)
   {\textbf{网络分区}\\SLM\,(4B)};
-\node[box=2.7cm, minimum height=1.05cm, right=0.4cm of t2] (t3)
-  {\textbf{容器资源耗尽}\\SLM\,(1.8B)};
-\node[box=1.3cm, minimum height=1.05cm, right=0.4cm of t3,
+\node[box=2.6cm, minimum height=1.05cm, right=0.4cm of t2] (t3)
+  {\textbf{容器资源耗尽}\\SLM\,(1.5B)};
+\node[box=1.2cm, minimum height=1.05cm, right=0.4cm of t3,
       draw=black!30, text=black!40] (tdot)
-  {\ldots\\新领域};
+  {\ldots\\新域};
 
 % ── 第四层：MOLE1 离线生产（居中对齐 planner） ───────────────────────────────
 \node[box=10.2cm, minimum height=0.82cm]
@@ -50,6 +50,6 @@
 % ── 图例 ─────────────────────────────────────────────────────────────────────
 \node[below=0.3cm of mole, align=left, font=\footnotesize] {%
   $\longrightarrow$ 运行时调用\qquad
-  $\dashrightarrow$ 模型离线生产（MOLE1 流水线）};
+  $\dashrightarrow$ 专家小智能体离线生产（三循环流水线）};
 
 \end{tikzpicture}
