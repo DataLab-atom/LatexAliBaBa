@@ -1,53 +1,55 @@
-% 图3：系统架构——Planner + MCP 工具层 + MOLE1 生产流水线
-\begin{tikzpicture}[font=\small, node distance=0.5cm and 0.6cm]
+% 图3：系统架构——Planner + MCP 工具层 + MOLE1（简洁版）
+\begin{tikzpicture}[font=\small, node distance=0.45cm and 0.5cm]
 
-% ── 第零层：故障事件输入 ──────────────────────────────────────────────────────
-\node[box=10cm, minimum height=0.65cm] (input)
+% ── 第一层：输入 ──────────────────────────────────────────────────────────────
+\node[box=10.2cm, minimum height=0.65cm] (input)
   {输入故障事件：告警 + 日志};
 
-% ── 第一层：云端 Planner ──────────────────────────────────────────────────────
-\node[greybox=10cm, minimum height=1.1cm, below=0.5cm of input] (planner)
-  {\textbf{云端 LLM Planner}（72B）\quad{\footnotesize\itshape\textcolor{black!55}{$\sim$500\,ms}}\\
-   \footnotesize 分解任务 $\to$ 选择并排序 MCP 工具};
+% ── 第二层：云端 Planner ──────────────────────────────────────────────────────
+\node[greybox=10.2cm, minimum height=1.05cm, below=0.45cm of input] (planner)
+  {\textbf{云端 LLM Planner（72B）}\quad
+   {\footnotesize\itshape\textcolor{black!50}{延迟 $\sim$500\,ms}}\\[2pt]
+   \footnotesize 分解故障事件 $\to$ 路由至对应 MCP 工具端点};
 
-% ── 第二层：MCP 工具端点 ──────────────────────────────────────────────────────
-\node[below=0.55cm of planner, font=\small\bfseries] (mcplabel)
-  {MCP 工具层（本地部署\;{\normalfont\footnotesize\itshape\textcolor{black!55}{$<$100\,ms}}）};
+% ── 第三层标签 ────────────────────────────────────────────────────────────────
+\node[below=0.45cm of planner, font=\small\bfseries] (mcplabel)
+  {本地 MCP 工具层\enspace{\normalfont\footnotesize\itshape\textcolor{black!50}{延迟 $<$100\,ms}}};
 
-\node[box=2.6cm, minimum height=1.1cm, below=0.3cm of mcplabel] (t1)
-  {\textbf{数据库故障}\\SLM (1.8B)\\{\footnotesize MOLE1 训练}};
-\node[box=2.6cm, minimum height=1.1cm, right=0.45cm of t1] (t2)
-  {\textbf{网络故障}\\SLM (4B)\\{\footnotesize MOLE1 训练}};
-\node[box=2.6cm, minimum height=1.1cm, right=0.45cm of t2] (t3)
-  {\textbf{容器故障}\\SLM (1.8B)\\{\footnotesize MOLE1 训练}};
-\node[box=1.4cm, minimum height=1.1cm, right=0.45cm of t3,
-      draw=black!35, text=black!40] (tdot)
-  {\ldots\\{\footnotesize 新领域}};
+% ── 第三层：MCP 工具端点 ──────────────────────────────────────────────────────
+\node[box=2.7cm, minimum height=1.05cm, below=0.3cm of mcplabel] (t1)
+  {\textbf{数据库故障}\\SLM\,(1.8B)};
+\node[box=2.7cm, minimum height=1.05cm, right=0.4cm of t1] (t2)
+  {\textbf{网络分区}\\SLM\,(4B)};
+\node[box=2.7cm, minimum height=1.05cm, right=0.4cm of t2] (t3)
+  {\textbf{容器资源耗尽}\\SLM\,(1.8B)};
+\node[box=1.3cm, minimum height=1.05cm, right=0.4cm of t3,
+      draw=black!30, text=black!40] (tdot)
+  {\ldots\\新领域};
 
-% ── 第三层：MOLE1 生产流水线（与 input 同宽居中）────────────────────────────
-\node[box=10cm, minimum height=0.9cm, below=0.7cm of t2]
-  at ([yshift=-0.7cm]t2.south -| input.center) (mole)
-  {\textbf{MOLE1 三循环生产流水线}
-   （C1: 数据采集 + CoT 合成 + 过滤 \;$\to$\;
-    C2: SFT $\to$ $\pi_0$ \;$\to$\;
-    C3: AIOps-GRPO $\to$ $\pi^*$；Bootstrap 回路迭代进化）};
+% ── 第四层：MOLE1 离线生产（居中对齐 planner） ───────────────────────────────
+\node[box=10.2cm, minimum height=0.82cm]
+  at ([yshift=-1.05cm]t2.south -| planner.center) (mole)
+  {\textbf{MOLE1 离线生产流水线：}
+   C1 数据采集+CoT合成 $\;\to\;$
+   C2 SFT $\;\to\;$
+   C3 AIOps-GRPO $\;\to\;$ MCP 封装};
 
-% ── 箭头：输入 → Planner ──────────────────────────────────────────────────────
+% ── 运行时箭头：输入 → Planner ────────────────────────────────────────────────
 \draw[arrow] (input) -- (planner);
 
-% ── 箭头：Planner → MCP 工具 ─────────────────────────────────────────────────
-\draw[arrow] (planner.south) -- ++(0,-0.35) -| (t1.north);
-\draw[arrow] (planner.south) -- ++(0,-0.35) -| (t2.north);
-\draw[arrow] (planner.south) -- ++(0,-0.35) -| (t3.north);
+% ── 运行时箭头：Planner → MCP 工具端点 ───────────────────────────────────────
+\draw[arrow] (planner.south) -- ++(0,-0.33) -| (t1.north);
+\draw[arrow] (planner.south) -- ++(0,-0.33) -| (t2.north);
+\draw[arrow] (planner.south) -- ++(0,-0.33) -| (t3.north);
 
-% ── 虚线箭头：MOLE1 → MCP 工具 ───────────────────────────────────────────────
-\draw[dasharrow] (mole.north) -- ++(0,0.25) -| (t1.south);
-\draw[dasharrow] (mole.north) -- ++(0,0.25) -| (t2.south);
-\draw[dasharrow] (mole.north) -- ++(0,0.25) -| (t3.south);
+% ── 离线生产虚线箭头：MOLE1 → MCP 工具端点 ───────────────────────────────────
+\draw[dasharrow] (mole.north) -- ++(0,0.3) -| (t1.south);
+\draw[dasharrow] (mole.north) -- ++(0,0.3) -| (t2.south);
+\draw[dasharrow] (mole.north) -- ++(0,0.3) -| (t3.south);
 
-% ── 图例 ──────────────────────────────────────────────────────────────────────
-\node[below=0.35cm of mole, align=left, font=\footnotesize] (leg) {%
-  $\longrightarrow$ 运行时调用 \qquad
-  $\dashrightarrow$ 模型生产（离线）};
+% ── 图例 ─────────────────────────────────────────────────────────────────────
+\node[below=0.3cm of mole, align=left, font=\footnotesize] {%
+  $\longrightarrow$ 运行时调用\qquad
+  $\dashrightarrow$ 模型离线生产（MOLE1 流水线）};
 
 \end{tikzpicture}
