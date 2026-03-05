@@ -36,7 +36,7 @@
 
 \draw[arrow] (m1) -- (m2);
 \draw[arrow] (m2) -- (m3);
-\draw[arrow] (m3.south) -- ++(0,-0.5);
+\draw[arrow] (m3.south) -- (mok.north);
 
 \node[box=\bw, minimum height=0.72cm, below=0.5cm of m3,
       fill=black!4, draw=black!55] (mok)
