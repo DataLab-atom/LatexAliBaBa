@@ -1,4 +1,4 @@
-% 图1：研究空白对比——现有方法 vs MOLE1（简洁版）
+% 图1：研究空白对比——现有方法 vs 本方案（简洁版）
 \begin{tikzpicture}[node distance=0.32cm and 1.1cm, font=\small]
 
 \def\bw{4.9cm}
@@ -24,7 +24,7 @@
 
 % ── 右列标题 ─────────────────────────────────────────────────────────────────
 \node[box=\bw, minimum height=0.65cm, fill=black!10, right=1.1cm of lh] (rh)
-  {\textbf{MOLE1（本方案）}};
+  {\textbf{本方案}};
 
 % ── 右列 MOLE1 路径 ────────────────────────────────────────────────────────────
 \node[greybox=\bw, minimum height=0.65cm, below=0.3cm of rh] (m1)

@@ -29,7 +29,7 @@
 % ── 第四层：MOLE1 离线生产（居中对齐 planner） ───────────────────────────────
 \node[box=10.2cm, minimum height=0.82cm]
   at ([yshift=-1.05cm]t2.south -| planner.center) (mole)
-  {\textbf{MOLE1 离线生产流水线：}
+  {\textbf{离线生产流水线：}
    C1 数据采集+CoT合成 $\;\to\;$
    C2 SFT $\;\to\;$
    C3 AIOps-GRPO $\;\to\;$ MCP 封装};
