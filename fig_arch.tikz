@@ -1,0 +1,60 @@
+% Figure 3: System architecture — Planner + MCP tool layer + MOLE1 production
+\begin{tikzpicture}[font=\small, node distance=0.5cm and 0.6cm]
+
+% ── Layer 0: Fault event input ────────────────────────────────────────────────
+\node[box=9.5cm, minimum height=0.65cm] (input)
+  {Incoming Fault Event: alerts + logs};
+
+% ── Layer 1: Cloud Planner ────────────────────────────────────────────────────
+\node[greybox=9.5cm, minimum height=1.0cm, below=0.5cm of input] (planner)
+  {\textbf{Cloud LLM Planner} (Qwen3-72B)\\
+   \footnotesize Decomposes task $\to$ selects \& sequences MCP tools};
+
+\node[left=0.05cm of planner, font=\footnotesize\itshape, rotate=90,
+      anchor=south] {};
+
+% ── Layer 2: MCP Tool endpoints ───────────────────────────────────────────────
+\node[below=0.5cm of planner, font=\small\bfseries] (mcplabel)
+  {MCP Tool Layer (local deployment, $<$100\,ms)};
+
+\node[box=2.8cm, minimum height=1.1cm, below=0.3cm of mcplabel] (t1)
+  {\textbf{DB-Fault SLM}\\(Qwen3-1.5B)\\{\footnotesize MOLE1-trained}};
+\node[box=2.8cm, minimum height=1.1cm, right=0.4cm of t1] (t2)
+  {\textbf{Network SLM}\\(Qwen3-3B)\\{\footnotesize MOLE1-trained}};
+\node[box=2.8cm, minimum height=1.1cm, right=0.4cm of t2] (t3)
+  {\textbf{Container SLM}\\(Qwen3-1.5B)\\{\footnotesize MOLE1-trained}};
+\node[box=1.5cm, minimum height=1.1cm, right=0.4cm of t3,
+      draw=black!40, text=black!40] (tdot)
+  {\ldots\\new domain};
+
+% ── Layer 3: MOLE1 production ────────────────────────────────────────────────
+\node[box=9.5cm, minimum height=0.9cm,
+      below=0.7cm of t2, xshift=0.6cm] (mole)
+  {\textbf{MOLE1 Production Pipeline}
+   (Stage 1–4: data harvest $\to$ CoT synthesis $\to$ filter $\to$ SLM train)};
+
+% ── Arrows: input → planner ───────────────────────────────────────────────────
+\draw[arrow] (input) -- (planner);
+
+% ── Arrows: planner ↔ MCP tools ──────────────────────────────────────────────
+\draw[arrow] (planner.south) -- ++(0,-0.35) -| (t1.north);
+\draw[arrow] (planner.south) -- ++(0,-0.35) -| (t2.north);
+\draw[arrow] (planner.south) -- ++(0,-0.35) -| (t3.north);
+
+% ── Arrows: MOLE1 → MCP tools ────────────────────────────────────────────────
+\draw[dasharrow] (mole.north) -- ++(0,0.25) -| (t1.south);
+\draw[dasharrow] (mole.north) -- ++(0,0.25) -| (t2.south);
+\draw[dasharrow] (mole.north) -- ++(0,0.25) -| (t3.south);
+
+% ── Legend ────────────────────────────────────────────────────────────────────
+\node[below=0.4cm of mole, align=left, font=\footnotesize] (leg) {%
+  $\longrightarrow$ runtime call \quad
+  $--\!\!>$ model production (offline)};
+
+% ── Latency annotation (inside boxes, below text) ─────────────────────────────
+\node[below=0.05cm of planner, font=\footnotesize\itshape, text=gray]
+  {cloud API $\sim$500\,ms};
+\node[below=0.05cm of mcplabel, font=\footnotesize\itshape, text=gray]
+  {local inference $<$100\,ms};
+
+\end{tikzpicture}

@@ -1,0 +1,49 @@
+% Figure 1: Gap comparison — existing methods vs MOLE1
+\begin{tikzpicture}[node distance=0.5cm and 1.2cm, font=\small]
+
+% ── Left column: Existing methods ────────────────────────────────────────────
+\node[box=4.5cm, minimum height=0.7cm] (e1)
+  {\textbf{Existing SLM-Production Methods}};
+
+\node[greybox=4.5cm, below=0.35cm of e1] (e2)
+  {Human-labelled CoT\\(expensive, slow)};
+\node[greybox=4.5cm, below=0.35cm of e2] (e3)
+  {Domain-aware teacher LLM\\(requires prior knowledge)};
+\node[greybox=4.5cm, below=0.35cm of e3] (e4)
+  {Pre-existing student model\\(chicken-and-egg)};
+
+\node[box=4.5cm, minimum height=0.7cm, below=0.35cm of e4,
+      draw=black, fill=black!8] (efail)
+  {\textbf{Cold-Start: All Prerequisites Missing}\\
+   $\Rightarrow$ \textit{Pipeline cannot start}};
+
+% ── Right column: MOLE1 ──────────────────────────────────────────────────────
+\node[box=4.5cm, minimum height=0.7cm, right=1.6cm of e1] (m1)
+  {\textbf{MOLE1 (Proposed)}};
+
+\node[greybox=4.5cm, below=0.35cm of m1] (m2)
+  {Raw $\langle$query, answer$\rangle$ pairs\\(from existing logs — free)};
+\node[greybox=4.5cm, below=0.35cm of m2] (m3)
+  {Medium LLM generates\\candidate CoT traces};
+\node[greybox=4.5cm, below=0.35cm of m3] (m4)
+  {\textbf{Answer-verification filter}\\(ground-truth answer as verifier)};
+
+\node[box=4.5cm, minimum height=0.7cm, below=0.35cm of m4,
+      draw=black!70, fill=black!4] (mok)
+  {Verified CoT triples $\rightarrow$ SLM training\\
+   $\Rightarrow$ \textit{No human annotation needed}};
+
+% ── Vertical flow arrows (right column) ──────────────────────────────────────
+\draw[arrow] (m2) -- (m3);
+\draw[arrow] (m3) -- (m4);
+\draw[arrow] (m4) -- (mok);
+
+% ── Separator line ────────────────────────────────────────────────────────────
+\draw[thick, dashed] ($(e1.north east)!0.5!(m1.north west)$)
+  -- ($(efail.south east)!0.5!(mok.south west)$);
+
+% ── Column labels ─────────────────────────────────────────────────────────────
+\node[above=0.15cm of e1, font=\small\bfseries] {Prior Work};
+\node[above=0.15cm of m1, font=\small\bfseries] {This Work};
+
+\end{tikzpicture}
