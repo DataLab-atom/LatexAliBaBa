@@ -1,7 +1,17 @@
 """
 生成阿里巴巴 AI 研究资助计划 2026 申请书 Word 版
-改进版：对齐 PDF 格式，包含页眉页脚、1.15 行距、表格优化等
+改进版：对齐 PDF 格式，包含页眉页脚、1.15 行距、表格优化、内嵌图表等
 """
+import os, subprocess, sys
+
+# ── 先生成图表 PNG ──────────────────────────────────────────────────────────
+_fig_script = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'generate_figures.py')
+if os.path.exists(_fig_script):
+    _needed = ['fig_gap.png','fig_pipeline.png','fig_arch.png','fig_gantt.png']
+    _base = os.path.dirname(_fig_script)
+    if not all(os.path.exists(os.path.join(_base, f)) for f in _needed):
+        subprocess.run([sys.executable, _fig_script], check=True)
+
 from docx import Document
 from docx.shared import Pt, Cm, RGBColor, Twips
 from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_LINE_SPACING
@@ -9,6 +19,8 @@ from docx.enum.table import WD_ALIGN_VERTICAL, WD_TABLE_ALIGNMENT
 from docx.oxml.ns import qn
 from docx.oxml import OxmlElement
 import copy
+
+FIG_DIR = os.path.dirname(os.path.abspath(__file__))
 
 doc = Document()
 
@@ -281,6 +293,32 @@ def code_block(text):
     return p
 
 
+def insert_figure(img_name, caption, width_cm=13.5):
+    """插入图表 PNG + 图注"""
+    img_path = os.path.join(FIG_DIR, img_name)
+    if not os.path.exists(img_path):
+        body(f'[图表：{img_name} 未找到]')
+        return
+    p = doc.add_paragraph()
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    p.paragraph_format.space_before = Pt(6)
+    p.paragraph_format.space_after  = Pt(2)
+    _apply_line_spacing(p, 1.0, 2)
+    run = p.add_run()
+    run.add_picture(img_path, width=Cm(width_cm))
+    # 图注
+    p_cap = doc.add_paragraph()
+    p_cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    p_cap.paragraph_format.space_before = Pt(2)
+    p_cap.paragraph_format.space_after  = Pt(10)
+    _apply_line_spacing(p_cap, 1.15, 10)
+    rc = p_cap.add_run(caption)
+    rc.font.size = Pt(9)
+    rc.font.italic = True
+    rc.font.name = '宋体'
+    rc._element.rPr.rFonts.set(qn('w:eastAsia'), '宋体')
+
+
 # ══════════════════════════════════════════════════════════════════════════════
 #  封面（首页，无页眉页脚）
 # ══════════════════════════════════════════════════════════════════════════════
@@ -384,6 +422,9 @@ body(
     bold_prefix='【冷启动困境：专家小模型从何而来？】\n'
 )
 
+insert_figure('fig_gap.png',
+    '图1  现有 SLM 生产方法在冷启动场景下失效（左）；本方案以历史记录中已有的标准答案作为自动验证器，绕过这一瓶颈（右）。')
+
 body(
     '如何在零人工标注、无领域感知教师的严格冷启动条件下，仅从原始 ⟨输入, 输出⟩ 对自动生产专家 SLM，'
     '使大小模型协同优化的联合目标得以完整求解？\n'
@@ -455,6 +496,10 @@ body(
 )
 
 heading3('三循环训练流程')
+
+insert_figure('fig_pipeline.png',
+    '图2  三循环迭代流水线：Cycle 1 产出验证数据集，Cycle 2 SFT 得到初始 SLM，'
+    'Cycle 3 策略优化强化推理质量，Bootstrap 回路驱动数据与模型协同进化。')
 
 body(
     '从运维日志中收集 ⟨告警+日志, 修复操作⟩ 对，无需任何人工标注。\n'
@@ -528,6 +573,9 @@ body(
     bold_prefix='系统架构：Planner + 专家小智能体\n'
 )
 
+insert_figure('fig_arch.png',
+    '图3  系统架构：云端 LLM Planner 分解故障事件，调度由三循环流水线离线生产的专家小智能体（SLM）高效执行各子任务。')
+
 # ══════════════════════════════════════════════════════════════════════════════
 #  2. 里程碑计划
 # ══════════════════════════════════════════════════════════════════════════════
@@ -585,46 +633,7 @@ for i, (m, work, deliv, period) in enumerate(milestone_data):
             r_c.font.bold = True
         _apply_line_spacing(p_c, 1.15, 0)
 
-# 甘特图（表格形式）
-doc.add_paragraph()
-body('图1  项目甘特图（四个里程碑）。', bold_prefix='')
-
-gantt_rows = [
-    ('任务', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'),
-    ('M1 流水线设计与数据准备',   '█', '█', '█', '', '', '', '', '', '', '', '', ''),
-    ('M2 Cycle 2/3 训练与基准',  '', '', '', '█', '█', '█', '█', '', '', '', '', ''),
-    ('M3 Bootstrap 与系统集成',  '', '', '', '', '', '', '', '█', '█', '', '', ''),
-    ('M4 评估与最终交付',         '', '', '', '', '', '', '', '', '', '█', '█', '█'),
-]
-tbl_g = doc.add_table(rows=len(gantt_rows), cols=13)
-tbl_g.style = 'Table Grid'
-tbl_g.alignment = WD_TABLE_ALIGNMENT.CENTER
-set_table_width(tbl_g, 14.4)
-for i, row_data in enumerate(gantt_rows):
-    for j, txt in enumerate(row_data):
-        c = tbl_g.rows[i].cells[j]
-        c.width = Cm(1.0) if j == 0 else Cm(1.0)
-        if j == 0:
-            c.width = Cm(5.4)
-        else:
-            c.width = Cm(0.75)
-        set_cell_margins(c, top=40, start=60, bottom=40, end=60)
-        para = c.paragraphs[0]
-        r = para.add_run(txt)
-        r.font.size = Pt(9)
-        if i == 0:
-            r.font.bold = True
-            r.font.name = '黑体'
-            r._element.rPr.rFonts.set(qn('w:eastAsia'), '黑体')
-            shade_cell(c, 'D4D4D4')
-        else:
-            r.font.name = '宋体'
-            r._element.rPr.rFonts.set(qn('w:eastAsia'), '宋体')
-            if txt == '█':
-                shade_cell(c, 'A0A0A0')
-        if j > 0:
-            para.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        _apply_line_spacing(para, 1.15, 0)
+insert_figure('fig_gantt.png', '图4  项目甘特图（四个里程碑）。')
 
 # ══════════════════════════════════════════════════════════════════════════════
 #  3. 交付成果
