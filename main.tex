@@ -1,10 +1,7 @@
-\documentclass[11pt,a4paper]{article}
+\documentclass[UTF8,zihao=-4,a4paper]{ctexart}
 
-% ── Packages ──────────────────────────────────────────────────────────────────
+% ── 页面设置 ──────────────────────────────────────────────────────────────────
 \usepackage[a4paper, top=2.5cm, bottom=2.5cm, left=2.8cm, right=2.8cm]{geometry}
-\usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage{lmodern}
 \usepackage{microtype}
 \usepackage{setspace}
 \usepackage{parskip}
@@ -26,29 +23,29 @@
 \usepackage{caption}
 \usepackage{float}
 
-% ── Typography ─────────────────────────────────────────────────────────────────
-\setstretch{1.15}
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{6pt}
+% ── 字体 ───────────────────────────────────────────────────────────────────────
+\setstretch{1.2}
+\setlength{\parindent}{2em}
+\setlength{\parskip}{4pt}
 
-% ── Section formatting ─────────────────────────────────────────────────────────
-\titleformat{\section}{\large\bfseries}{}{0em}{\thesection.\quad}[\vspace{2pt}\hrule\vspace{4pt}]
+% ── 节标题格式 ─────────────────────────────────────────────────────────────────
+\titleformat{\section}{\large\bfseries}{}{0em}{\thesection、}[\vspace{2pt}\hrule\vspace{4pt}]
 \titleformat{\subsection}{\normalsize\bfseries}{}{0em}{\thesubsection\quad}
 \titlespacing{\section}{0pt}{14pt}{6pt}
 \titlespacing{\subsection}{0pt}{10pt}{4pt}
 
-% ── Header / footer ────────────────────────────────────────────────────────────
+% ── 页眉页脚 ───────────────────────────────────────────────────────────────────
 \pagestyle{fancy}
 \fancyhf{}
-\fancyhead[L]{\small Alibaba AI Research Scheme 2026}
-\fancyhead[R]{\small Topic 1 \& 10}
+\fancyhead[L]{\small 阿里巴巴创新研究计划 2026}
+\fancyhead[R]{\small 课题一 \& 课题十}
 \fancyfoot[C]{\thepage}
 \renewcommand{\headrulewidth}{0.4pt}
 
-% ── Hyperref ──────────────────────────────────────────────────────────────────
+% ── 超链接 ─────────────────────────────────────────────────────────────────────
 \hypersetup{colorlinks=true, linkcolor=black, citecolor=black, urlcolor=black}
 
-% ── TikZ styles ───────────────────────────────────────────────────────────────
+% ── TikZ 样式 ─────────────────────────────────────────────────────────────────
 \tikzset{
   box/.style={rectangle, draw=black, thick, rounded corners=3pt,
               text width=#1, align=center, minimum height=0.8cm, fill=white},
@@ -64,365 +61,295 @@
 \begin{document}
 
 % ══════════════════════════════════════════════════════════════════════════════
-%  COVER PAGE
+%  封面
 % ══════════════════════════════════════════════════════════════════════════════
 \thispagestyle{empty}
 \begin{center}
-  {\LARGE\bfseries Alibaba AI Research Scheme 2026}\\[12pt]
-  {\large\bfseries Research Proposal}\\[30pt]
+  {\LARGE\bfseries 阿里巴巴创新研究计划 2026}\\[12pt]
+  {\large\bfseries 研究课题申请书}\\[30pt]
 
   \begin{tabular}{ll}
-    \textbf{Project Name}   & \begin{minipage}[t]{9cm}
-                                Automated Production of MCP-Endpoint Expert Models\\
-                                via Cold-Start Distillation for AIOps Fault Response
-                              \end{minipage}\\[12pt]
-    \textbf{Topic}          & Topic 1 (Large–Small Model Collaboration) / Topic 10 (AIOps)\\[6pt]
-    \textbf{Date}           & March 2026\\[6pt]
-    \textbf{Organization}   & \textit{<FILL: University/Institution Full Name>}\\[6pt]
-    \textbf{Author (PI)}    & \textit{<FILL: PI Full Name>}\\[6pt]
-    \textbf{Email}          & \textit{<FILL: pi@university.edu>}\\
+    \textbf{课题名称}   & \begin{minipage}[t]{9cm}
+                            面向 AIOps 故障应急响应的\\
+                            MCP 端点专家模型自动化生产方法研究\\
+                            ——基于大模型冷启动知识蒸馏
+                          \end{minipage}\\[18pt]
+    \textbf{申请课题}   & 课题一（大小模型协同）/ 课题十（AIOps 故障应急）\\[6pt]
+    \textbf{申请日期}   & 2026 年 3 月\\[6pt]
+    \textbf{申请单位}   & \textit{【填写：所在高校/科研院所全称】}\\[6pt]
+    \textbf{申请人（PI）} & \textit{【填写：PI 姓名】}\\[6pt]
+    \textbf{联系邮箱}   & \textit{【填写：pi@university.edu.cn】}\\
   \end{tabular}
 \end{center}
 
 \vfill
 \begin{center}
-  \small\textit{Submitted in response to Alibaba AI Research Scheme 2026.\\
-  Funding: RMB 600,000. Duration: One year.}
+  \small\textit{本申请书响应阿里巴巴创新研究计划 2026 征题提交。\\
+  申请经费：人民币 60 万元，项目周期：一年。}
 \end{center}
 
 \newpage
 
 % ══════════════════════════════════════════════════════════════════════════════
-%  TABLE OF CONTENTS (optional – remove if not needed)
+%  一、项目简介
 % ══════════════════════════════════════════════════════════════════════════════
-% \tableofcontents
-% \newpage
+\section{项目简介}
 
-% ══════════════════════════════════════════════════════════════════════════════
-%  1. INTRODUCTION
-% ══════════════════════════════════════════════════════════════════════════════
-\section{Introduction}
+\subsection{课题名称}
 
-% ──────────────────────────────────────────────────────────────────────────────
-\subsection{Title of Project}
+\textbf{面向 AIOps 故障应急响应的 MCP 端点专家模型自动化生产方法研究——基于大模型冷启动知识蒸馏}
 
-\textbf{Automated Production of MCP-Endpoint Expert Models via Large-Model Cold-Start
-Distillation for AIOps Fault Emergency Response}
+\subsection{研究背景与意义}
 
-% ──────────────────────────────────────────────────────────────────────────────
-\subsection{Background and Significance}
+\textbf{产业需求背景。}
+阿里巴巴等大规模互联网平台运营着复杂异构的基础设施，对系统稳定性要求极高。
+AIOps 故障应急响应是核心运维能力，却高度依赖人工：值班工程师需在严苛时限内完成告警诊断、跨子系统日志关联与处置决策。
+Qwen3 系列模型\citep{qwen3}的成熟为该流程的自动化提供了现实条件。
+然而，云端大语言模型（LLM）单次 API 调用延迟达 500\,ms--2\,s，故障风暴期间甚至直接超时；而本地部署的小语言模型（SLM）推理延迟可控制在 $<$100\,ms，在对延迟极度敏感的 AIOps 执行层具有不可替代的价值。
 
-\textbf{Industrial motivation.}
-Large-scale internet platforms such as Alibaba operate complex, heterogeneous
-infrastructure that must maintain near-zero downtime. Fault-emergency response (AIOps)
-is therefore a critical operational capability, yet it remains highly labor-intensive:
-on-call engineers must diagnose alerts, correlate logs across dozens of subsystems,
-and prescribe remediation actions under severe time pressure.
-The Qwen3 model family \citep{qwen3} and the broader maturation of Large Language Models
-(LLMs) open the door to automating this workflow.
-However, a single cloud-hosted LLM incurs API latency of 500\,ms–2\,s per call—and
-can time out entirely during high-volume fault storms—whereas locally deployed small
-language models (SLMs) respond in $<$100\,ms, making them indispensable for latency-
-sensitive AIOps execution.
+\textbf{LLM--SLM 协同研究中被忽视的前提假设。}
+本计划课题一聚焦于大小模型的高效协同机制。现有协同框架（如 FrugalGPT、RouteLLM）
+均隐含一个前提：\emph{领域专家小模型已经存在}，其贡献在于设计高效的路由或调度策略。
+然而，这些工作均未回答更本质的问题：\emph{领域专家小模型从何而来？}
 
-\textbf{The hidden assumption in LLM–SLM collaboration research.}
-Topic 1 of this scheme asks how large and small models can collaborate effectively.
-Existing collaboration frameworks (e.g., FrugalGPT, RouteLLM) implicitly assume that
-\emph{specialist small models already exist}: their contribution is an efficient
-routing or scheduling policy that decides which model handles a given query.
-They do not answer the more fundamental question: \emph{where do specialist small
-models come from?}
+\textbf{链式推理训练是构建高能力 SLM 的成熟路径。}
+STaR \citep{star}、Distilling Step-by-Step \citep{dss} 及相关工作 \citep{minillm,ddk,onpolicy}
+已充分证明：在训练时为 SLM 提供\emph{思维链（CoT）推理}，而非仅记忆输入输出对，
+能大幅提升其在领域任务上的表现。
+然而，获取高质量 CoT 标注需要昂贵的人工标注或具备领域先验的大型教师模型——
+而在\emph{冷启动}场景下（即全新业务子领域启动时），上述两类资源均不具备。
 
-\textbf{Reasoning-chain training as the established path to capable SLMs.}
-A separate line of work—STaR \citep{star}, Distilling Step-by-Step \citep{dss}, and
-related methods \citep{minillm,ddk,onpolicy}—has convincingly demonstrated that
-equipping an SLM with \emph{chain-of-thought (CoT) reasoning} during training, rather
-than merely memorising input–output pairs, dramatically improves its performance on
-domain-specific tasks.
-The bottleneck is therefore data: obtaining high-quality CoT annotations requires
-either expensive human annotators or a large teacher model that can generate rationales
-on demand.
-Neither resource is available at \emph{cold-start}, i.e., when a team launches a new
-business domain with no labelled data and no pre-existing expert model.
-
-\textbf{The research gap.}
-As illustrated in Figure~\ref{fig:gap}, existing SLM-production methods all require
-at least one of: (a) human-labelled CoT, (b) a teacher model with prior knowledge of
-the domain, or (c) an already-performing student model to bootstrap from.
-In cold-start settings—precisely the condition that governs new AIOps sub-scenarios—
-none of these prerequisites hold.
-This gap motivates our core proposal: an automated pipeline that generates
-CoT-annotated training data \emph{from raw} $\langle$\emph{input, output}$\rangle$
-\emph{pairs alone}, requiring no human intervention and no domain-aware teacher.
+\textbf{研究空白。}
+如图~\ref{fig:gap} 所示，现有 SLM 生产方法均至少依赖以下之一：
+（a）人工标注的 CoT；（b）具有领域先验的教师模型；或（c）已有一定能力的学生模型作为引导。
+在冷启动场景——恰恰是 AIOps 新子场景上线时的普遍条件——上述前提均不成立。
+这一空白促成本课题的核心提案：一套\emph{仅从原始 $\langle$输入, 输出$\rangle$ 数据对出发}，
+无需人工介入、无需领域感知教师模型的 CoT 标注与 SLM 蒸馏自动化流水线。
 
 \begin{figure}[H]
 \centering
 \input{fig_gap.tikz}
-\caption{Existing SLM-production methods fail at cold-start (left); MOLE1 succeeds
-by using the observed answer as an automatic verifier (right).}
+\caption{现有 SLM 生产方法在冷启动场景下的失效（左）；MOLE1 利用已知答案作为自动验证器实现突破（右）。}
 \label{fig:gap}
 \end{figure}
 
-\textbf{Why AIOps is the ideal proving ground.}
-Three structural properties make AIOps the best domain in which to validate the proposed
-approach.
+\textbf{为何 AIOps 是最佳验证场景。}
+AIOps 具备三项结构性优势，使其成为验证本方法最理想的领域。
 \begin{enumerate}[leftmargin=*, itemsep=2pt]
-  \item \textbf{Data abundance without labelling cost.}
-        Every large-scale platform accumulates rich
-        $\langle$alert+log, remediation-action$\rangle$ pairs in its operational
-        databases—precisely the $\langle$input, output$\rangle$ format MOLE1
-        requires—with zero additional annotation effort.
-  \item \textbf{Objective, binary verification.}
-        ``Did the proposed remediation resolve the fault?'' is a ground-truth signal
-        available in historical records, enabling fully automated offline evaluation
-        via incident replay—no live environment needed.
-  \item \textbf{Quantifiable latency advantage.}
-        Fault response is acutely latency-sensitive. A locally deployed SLM responds
-        in $<$100\,ms; a cloud LLM API call costs 500\,ms--2\,s and times out under
-        peak-load fault storms. This 10--20$\times$ gap is a concrete, measurable
-        industrial pain point that MOLE1 directly addresses.
-  \item \textbf{Strategic dual coverage.}
-        The proposed method directly addresses both Topic 1 (LLM–SLM collaboration
-        mechanism) and Topic 10 (fault emergency response AIOps), demonstrating that
-        a principled methodology can simultaneously solve two industrial pain points.
+  \item \textbf{数据丰富、无需标注。}
+        大规模平台的运维数据库天然积累了海量
+        $\langle$告警+日志, 处置操作$\rangle$ 数据对——正是 MOLE1 所需的
+        $\langle$输入, 输出$\rangle$ 格式，无需额外标注成本。
+  \item \textbf{客观、可自动化的验证信号。}
+        "所提处置方案是否解决了故障？"是历史记录中直接可查的真值信号，
+        支持通过故障回放进行全自动离线评测，无需动用线上环境。
+  \item \textbf{延迟优势可量化。}
+        故障响应对延迟极为敏感：本地 SLM 响应 $<$100\,ms，
+        云端 LLM API 调用耗时 500\,ms--2\,s，峰值故障风暴期间甚至超时。
+        这 10--20 倍的延迟差距是 MOLE1 直接解决的、可量化的产业痛点。
+  \item \textbf{同时覆盖双课题。}
+        本方法同时响应课题一（大小模型协同机制）与课题十（AIOps 故障应急响应），
+        以一套方法论同时解决两个产业痛点。
 \end{enumerate}
 
-% ──────────────────────────────────────────────────────────────────────────────
-\subsection{Objective of Project}
+\subsection{研究目标}
 
-This project pursues four tightly coupled objectives:
+本课题设立五项紧密耦合的研究目标：
 
 \begin{enumerate}[leftmargin=*, label=\textbf{O\arabic*.}, itemsep=3pt]
-  \item \textbf{MOLE1 pipeline design.}
-        Design and implement the full cold-start pipeline for automated CoT generation
-        and SLM distillation, including the answer-verification filtering mechanism.
-  \item \textbf{AIOps validation.}
-        Validate the pipeline on real or realistic AIOps datasets, demonstrating that
-        domain-specialist SLMs produced by MOLE1 match or outperform general LLMs on
-        fault diagnosis and remediation benchmarks.
-  \item \textbf{MCP encapsulation.}
-        Package each trained SLM as a standardised
-        Model-Context-Protocol (MCP) tool endpoint, enabling plug-and-play integration
-        with a cloud LLM Planner layer.
-  \item \textbf{Specialisation mechanism analysis.}
-        Provide rigorous empirical and theoretical analysis explaining \emph{why} a
-        domain-focused SLM can outperform a general LLM on targeted tasks (the
-        ``specialisation beats generalisation'' phenomenon).
-  \item \textbf{Cross-domain transfer study.}
-        Validate MOLE1's domain generality by applying the identical pipeline to at
-        least one additional domain beyond AIOps (e.g., code-review classification or
-        customer-service triage), demonstrating that the method's value is not
-        scenario-specific.
+  \item \textbf{MOLE1 流水线设计与实现。}
+        设计并实现完整的冷启动 CoT 自动生成与 SLM 蒸馏流水线，
+        包括答案验证过滤机制。
+  \item \textbf{AIOps 场景验证。}
+        在真实或近真实的 AIOps 数据集上验证流水线，
+        证明 MOLE1 产出的领域专家 SLM 在故障诊断与处置基准上
+        达到或超越通用 LLM 的表现。
+  \item \textbf{MCP 封装与集成。}
+        将每个训练好的 SLM 封装为符合 Model Context Protocol（MCP）标准的工具端点，
+        实现与云端 LLM 规划层的即插即用集成。
+  \item \textbf{专精化机制分析。}
+        通过严格的实证与理论分析，解释\emph{为何}领域专注 SLM 能在目标任务上超越通用 LLM（"专精胜泛化"现象）。
+  \item \textbf{跨领域迁移验证。}
+        将 MOLE1 流水线应用于至少一个 AIOps 以外的领域（如代码审查分类或客服意图识别），
+        验证方法的领域无关性，证明其通用价值。
 \end{enumerate}
 
-% ──────────────────────────────────────────────────────────────────────────────
-\subsection{Development Method}
+\subsection{研究方法}
 
-\subsubsection*{Core Insight: MOLE1—Answer-Verified CoT Synthesis}
+\subsubsection*{核心思路：MOLE1——答案验证驱动的 CoT 合成}
 
-We propose \textbf{MOLE1} (\textbf{M}odel-\textbf{O}utput-\textbf{L}abel-\textbf{E}licited
-CoT Synthesis, iteration 1), a domain-agnostic pipeline that converts raw
-$\langle$input, output$\rangle$ pairs into CoT-annotated training data \emph{without
-any human annotation or domain-aware teacher model}.
-The key innovation is using the \emph{known answer as an automatic verifier}:
+我们提出 \textbf{MOLE1}（\textbf{M}odel-\textbf{O}utput-\textbf{L}abel-\textbf{E}licited
+CoT Synthesis，第一版），一套\textbf{领域无关}的自动化流水线，
+能从原始 $\langle$输入, 输出$\rangle$ 数据对出发合成 CoT 标注训练数据，
+\emph{无需任何人工标注或领域感知教师模型}。
+核心创新在于将\emph{已知答案用作自动验证器}：
 
 {\small
 \begin{align*}
-\underbrace{\langle q,\, a \rangle}_{\text{cold-start data}}
-&\;\xrightarrow{\;\text{LLM},\;k\text{ samples}\;}\;
-\text{candidate CoTs}
-\;\xrightarrow{\;\text{answer filter}\;}\;
-\underbrace{\langle q,\, \text{CoT}^*,\, a \rangle}_{\text{verified triples}}
+\underbrace{\langle q,\, a \rangle}_{\text{冷启动数据}}
+&\;\xrightarrow{\;\text{中等 LLM},\;k\text{ 次采样}\;}\;
+\text{候选 CoT}
+\;\xrightarrow{\;\text{答案一致性过滤}\;}\;
+\underbrace{\langle q,\, \text{CoT}^*,\, a \rangle}_{\text{验证数据三元组}}
 \;\xrightarrow{\;\text{SFT+LoRA}\;}\;
-\underbrace{\text{specialist SLM}}_{\text{MCP endpoint}}
+\underbrace{\text{专家 SLM}}_{\text{MCP 端点}}
 \end{align*}}
-\noindent where $q$ = query, $a$ = ground-truth answer, CoT$^*$ = verified reasoning chain.
+\noindent 其中 $q$ = 查询，$a$ = 真值答案，CoT$^*$ = 通过验证的推理链。
 
-A medium-sized model (e.g., Qwen3-7B) generates $k$ candidate reasoning chains per
-query via temperature sampling ($\tau{=}0.8$). Only chains whose final conclusion
-matches the ground-truth answer are retained—a pass/fail criterion that requires
-\emph{no domain knowledge}. The verified triples fine-tune a compact SLM (e.g.,
-Qwen3-1.5B/3B) exclusively on the target domain.
+中等规模模型（如 Qwen3-7B）对每条查询通过温度采样（$\tau{=}0.8$）生成 $k$ 条候选推理链，
+仅保留最终结论与真值答案一致的推理链——这一筛选标准\emph{不依赖任何领域知识}，
+在冷启动条件下完全可行。筛选得到的三元组用于对轻量 SLM（如 Qwen3-1.5B/3B）进行专项微调。
 
-\textbf{Domain generality.}
-Although we validate MOLE1 on AIOps, the pipeline is \emph{entirely
-domain-agnostic}: it requires only that (i) historical
-$\langle$input, output$\rangle$ pairs exist and (ii) answer correctness can be
-verified automatically. This condition holds across a wide range of industrial
-scenarios—customer-service triage, code-review classification, supply-chain
-anomaly detection—making MOLE1 a general-purpose cold-start engine for
-LLM–SLM collaboration, well beyond its AIOps instantiation.
-The AIOps domain is chosen as the primary validation testbed because it uniquely
-satisfies all three structural advantages described above and provides a clear,
-reproducible experimental protocol.
+\textbf{领域无关性说明。}
+尽管本课题以 AIOps 作为验证领域，MOLE1 流水线\emph{完全领域无关}：
+仅要求（i）存在历史 $\langle$输入, 输出$\rangle$ 数据对，
+且（ii）答案正确性可自动验证。
+这一条件在广泛的工业场景中均成立——客服工单分类、代码审查、供应链异常检测等——
+使 MOLE1 成为大小模型协同框架下通用的冷启动生产引擎，远超其 AIOps 实例化的范围。
 
-\subsubsection*{Four-Stage Pipeline}
+\subsubsection*{四阶段流水线}
 
-Figure~\ref{fig:pipeline} shows the complete MOLE1 pipeline.
+图~\ref{fig:pipeline} 展示了 MOLE1 的完整流水线。
 
 \begin{figure}[H]
 \centering
 \input{fig_pipeline.tikz}
-\caption{MOLE1 four-stage pipeline for automated SLM production from cold-start data.}
+\caption{MOLE1 冷启动 SLM 自动生产四阶段流水线。}
 \label{fig:pipeline}
 \end{figure}
 
 \begin{description}[leftmargin=0pt, itemsep=4pt]
-  \item[Stage 1 – Data Harvesting.]
-        Collect $\langle$alert+log, remediation$\rangle$ pairs from operational logs.
-        No manual labelling; records come from existing incident-management systems.
-  \item[Stage 2 – CoT Candidate Generation.]
-        For each query, Qwen3-7B generates $k$ candidate reasoning chains
-        (temperature $\tau{=}0.8$, top-$p{=}0.95$). This step requires no domain
-        knowledge on the part of the generating model.
-  \item[Stage 3 – Answer-Verification Filtering.]
-        Each candidate CoT is evaluated: does the final conclusion match the recorded
-        remediation action? Matched CoTs are retained; mismatched ones are discarded.
-        Acceptance rate varies with task complexity; analogous filtering in STaR
-        \citep{star} yields 30--70\% retention under comparable settings.
-        We note that data quality is a prerequisite: records involving operator error
-        or mislabelled remediation are excluded via a lightweight anomaly filter in
-        Stage 1.
-  \item[Stage 4 – SLM Fine-Tuning and MCP Packaging.]
-        The verified triples train a compact SLM via supervised fine-tuning (SFT) with
-        LoRA. The trained model is wrapped as an MCP-compliant tool endpoint and
-        registered with the Planner layer.
+  \item[阶段一——数据采集。]
+        从运维系统采集 $\langle$告警+日志, 处置操作$\rangle$ 数据对，
+        无需人工标注；数据来自现有的故障管理系统。
+        同时运行轻量级异常过滤器，剔除操作员误操作或处置结果存疑的记录，
+        确保数据质量。
+  \item[阶段二——CoT 候选生成。]
+        对每条查询，Qwen3-7B 以温度采样（$\tau{=}0.8$，top-$p{=}0.95$）
+        生成 $k$ 条候选推理链。该步骤对生成模型无领域知识要求。
+  \item[阶段三——答案验证过滤。]
+        逐条评估候选 CoT 的最终结论是否与历史处置操作一致；
+        一致者保留，不一致者丢弃。
+        类似筛选在 STaR \citep{star} 中的保留率约为 30--70\%。
+  \item[阶段四——SLM 微调与 MCP 封装。]
+        以验证数据三元组通过 SFT + LoRA 对轻量 SLM 进行微调；
+        训练完成后将模型封装为 MCP 标准工具端点，注册至规划层。
 \end{description}
 
-\subsubsection*{Experimental Design and Evaluation Protocol}
+\subsubsection*{实验设计与评估方案}
 
-\textbf{Dataset.}
-We use a combination of (a) a proprietary AIOps dataset from Alibaba operational
-logs (subject to a mutually agreed data-sharing protocol with Alibaba's SRE team)
-and (b) the publicly available AIOps-2022 benchmark \citep{aiops} for reproducibility.
-Experiments cover three AIOps sub-scenarios: database-layer faults, network
-partition events, and container resource exhaustion.
-A cross-domain transfer experiment on a public code-review dataset will validate
-MOLE1's domain generality (Objective O5).
+\textbf{数据集。}
+采用两类数据：（a）阿里巴巴运维日志内部数据集（数据使用须经双方协商的数据共享协议授权）；
+（b）公开的 AIOps-2022 基准数据集\citep{aiops}（用于可复现性对比）。
+实验覆盖三类 AIOps 子场景：数据库层故障、网络分区故障、容器资源耗尽。
+另设跨领域迁移实验（目标 O5），在公开代码审查数据集上验证 MOLE1 的领域泛化能力。
 
-\textbf{Baselines.}
+\textbf{基准对比方案。}
 \begin{itemize}[itemsep=1pt]
-  \item \textbf{LLM-only}: Qwen3-72B queried via API, no local SLM.
-  \item \textbf{SLM w/o CoT}: SLM fine-tuned on $\langle$input, output$\rangle$ pairs
-        only (no reasoning chains).
-  \item \textbf{SLM + teacher CoT}: SLM fine-tuned with CoT generated by Qwen3-72B
-        acting as teacher (the ``oracle'' upper bound requiring a capable teacher).
-  \item \textbf{MOLE1 (ours)}: SLM fine-tuned on answer-verified CoT from Qwen3-7B.
+  \item \textbf{仅大模型（LLM-only）}：Qwen3-72B 云端 API，无本地 SLM。
+  \item \textbf{无 CoT 的 SLM（SLM w/o CoT）}：仅在输入输出对上微调，无推理链。
+  \item \textbf{教师 CoT 的 SLM（SLM + teacher CoT）}：以 Qwen3-72B 生成的 CoT 微调（需要大模型教师，为"上限"基准）。
+  \item \textbf{MOLE1（本文方法）}：以 Qwen3-7B 生成的答案验证 CoT 微调。
 \end{itemize}
 
-\textbf{Metrics.}
-Remediation-action accuracy (top-1 match rate), inference latency (p50/p99),
-and compute cost per query (FLOPs / API tokens).
-Statistical significance assessed via bootstrap resampling ($n{=}1000$).
+\textbf{评估指标。}
+处置动作准确率（Top-1 匹配率）、推理延迟（p50/p99）、单次查询计算成本（FLOPs / API token 数）。
+统计显著性通过自助法重采样验证（$n{=}1000$）。
 
-\subsubsection*{System Architecture: Planner + MCP Tool Layer}
+\subsubsection*{系统架构：规划层 + MCP 工具层}
 
-Figure~\ref{fig:arch} depicts the overall deployment architecture.
+图~\ref{fig:arch} 展示了整体部署架构。
 
 \begin{figure}[H]
 \centering
 \input{fig_arch.tikz}
-\caption{System architecture: cloud LLM as Planner orchestrates locally deployed
-MCP-endpoint SLMs produced by the MOLE1 pipeline.}
+\caption{系统架构：云端 LLM 作为规划器，调度由 MOLE1 流水线生产的 MCP 端点专家 SLM。}
 \label{fig:arch}
 \end{figure}
 
-The cloud-hosted LLM (Qwen3-72B or equivalent) acts as a \textbf{Planner}: it
-decomposes incoming fault events into sub-tasks, determines execution order, and
-invokes the appropriate MCP tool endpoints.
-Each MCP tool wraps an SLM that has been trained exclusively for one AIOps sub-scenario
-(e.g., database slowdown diagnosis, network partition detection, container OOM triage).
+云端 LLM（Qwen3-72B 或同等级模型）担任\textbf{规划器}：将入站故障事件分解为子任务，
+确定执行顺序，并依次调用对应的 MCP 工具端点。
+每个 MCP 工具封装一个专项 SLM，该 SLM 经 MOLE1 在单一 AIOps 子场景（如数据库慢查询诊断、
+网络分区检测、容器 OOM 定位）上专项训练。
 
-The Planner–Executor split reflects the asymmetric nature of the two roles:
+规划器--执行器分层设计反映了两类角色的非对称性：
 \begin{itemize}[itemsep=2pt]
-  \item The Planner requires \emph{global semantic understanding} to decompose novel,
-        multi-step fault events—a capability that demands the breadth of a large model.
-  \item Each Executor requires \emph{deep, narrow expertise} in a single sub-domain—
-        a capability that benefits from focused training on domain-specific CoT data,
-        and which does \emph{not} benefit from the generalisation enforced by
-        multi-task training on a large model.
+  \item 规划器需要\emph{全局语义理解}以分解复杂多步故障事件——这需要大模型的广度。
+  \item 每个执行器需要\emph{单一子领域的深度专精}——这受益于领域专项 CoT 训练，
+        而\emph{不受益于}大模型多任务训练所强制执行的泛化约束。
 \end{itemize}
 
-This design also delivers the latency advantage: only the Planner call traverses the
-cloud API ($\sim$500\,ms); all Executor SLM inferences run locally ($<$100\,ms), so
-the end-to-end system responds in seconds even under high alert volume.
+该设计同时带来延迟优势：仅规划器调用经过云端 API（$\sim$500\,ms）；
+所有执行器 SLM 推理均在本地完成（$<$100\,ms），
+即便在高频告警场景下系统整体响应仍维持在秒级以内。
 
-\subsubsection*{Why a Specialist SLM Can Outperform a General LLM}
+\subsubsection*{为何领域专精 SLM 能超越通用 LLM}
 
-The ``specialisation beats generalisation'' phenomenon is well-supported by the
-distillation literature \citep{dss,ddk} and follows from two observations:
-(i) a general LLM's parameters are shared across thousands of tasks, diluting
-per-domain representational capacity \citep{slmsurvey}; (ii) an SLM fine-tuned
-exclusively on domain-specific CoT data occupies a lower-dimensional subspace of
-the parameter space that is tightly aligned with the target domain's inference
-patterns, achieving higher precision despite far fewer parameters.
-We will provide both empirical evidence (ablation studies varying model size and
-training-data domain purity) and a capacity-allocation analysis to formalise this
-intuition.
+"专精胜泛化"现象已得到蒸馏文献的充分支持\citep{dss,ddk}，
+其原因在于：（i）通用 LLM 的参数被数千个任务共享，导致单领域的表示容量被稀释\citep{slmsurvey}；
+（ii）在领域专项 CoT 数据上微调的 SLM 在参数空间中占据更低维的子空间，
+与目标领域的推理模式高度对齐，以更少的参数实现更高的精度。
+本课题将提供消融实验（变量：模型规模、训练数据领域纯度）与容量分配分析，对上述直觉进行形式化论证。
 
-\textbf{Why not use the 7B medium model directly as executor?}
-One may ask: since Qwen3-7B already possesses CoT capability and can run locally
-on a single A10 GPU, why distil further to a 1.5B/3B model?
-Three reasons: (1) \emph{accuracy}: a 1.5B SLM trained exclusively on
-domain-verified CoT outperforms a 7B generalist on the target sub-task—the
-domain-purity effect dominates the size effect at this scale \citep{ddk};
-(2) \emph{deployment scale}: in a large platform with hundreds of hosts,
-1.5B SLMs can be co-located with each service node at negligible memory overhead,
-enabling zero-latency local inference without GPU scheduling;
-(3) \emph{cost}: 1.5B inference costs $\approx$5$\times$ fewer FLOPs than 7B,
-critical for high-frequency fault monitoring (thousands of events per minute).
+\textbf{为何不直接以 7B 模型作为执行器？}
+或许有人会问：既然 Qwen3-7B 已具备 CoT 能力且可在本地单张 A10 卡上运行，
+为何还要进一步蒸馏为 1.5B/3B 模型？
+原因有三：（1）\emph{准确率}：在领域验证 CoT 上训练的 1.5B SLM 在目标子任务上超越 7B 通用模型——
+领域纯度效应在此规模下主导尺寸效应\citep{ddk}；
+（2）\emph{部署规模}：大型平台拥有数百台主机，1.5B SLM 可与各服务节点共部署，
+内存开销极低，无需 GPU 调度即可实现零延迟本地推理；
+（3）\emph{成本}：1.5B 推理的 FLOPs 约为 7B 的 $\frac{1}{5}$，
+对于每分钟数千次故障告警的高频监控场景至关重要。
 
 % ══════════════════════════════════════════════════════════════════════════════
-%  2. MILESTONE
+%  二、项目里程碑
 % ══════════════════════════════════════════════════════════════════════════════
-\section{Milestone}
+\section{项目里程碑}
 
-\subsection{Duration of Project}
-One year, commencing from the effective date of the Research Collaboration Agreement.
+\subsection{项目周期}
+一年，自双方签署研究合作协议生效之日起计。
 
-\subsection{Plan}
+\subsection{阶段计划}
 
 \begin{table}[H]
 \centering
-\caption{Project milestones and deliverables.}
+\caption{项目各阶段任务与交付物}
 \label{tab:milestone}
 \renewcommand{\arraystretch}{1.4}
 \begin{tabularx}{\linewidth}{c X X c}
 \toprule
-\textbf{Stage} & \textbf{Activities} & \textbf{Deliverable(s)} & \textbf{Period}\\
+\textbf{阶段} & \textbf{主要工作} & \textbf{交付物} & \textbf{时间}\\
 \midrule
 M1 &
-  \textbf{Pipeline Design \& Data Preparation.}
-  Formalise MOLE1 algorithm; collect and pre-process AIOps
-  $\langle$input, output$\rangle$ dataset; implement CoT candidate generation
-  (Qwen3-7B) and answer-verification filter. &
-  Dataset \& filter module; technical report. &
-  Month 1–3 \\
+  \textbf{流水线设计与数据准备。}
+  形式化 MOLE1 算法；采集并预处理 AIOps 数据集；
+  实现 CoT 候选生成（Qwen3-7B）与答案验证过滤器。 &
+  数据集及过滤模块；技术报告。 &
+  第 1--3 月 \\
 \midrule
 M2 &
-  \textbf{SLM Training \& Benchmarking.}
-  Fine-tune SLMs on verified CoT triples; conduct comparison experiments
-  against general LLM baselines on AIOps benchmarks;
-  specialisation-mechanism analysis. &
-  Trained SLM models; experiment report;
-  draft of CCF-A paper \#1. &
-  Month 4–7 \\
+  \textbf{SLM 训练与基准测试。}
+  在验证数据三元组上微调 SLM；与通用 LLM 基准进行对比实验；
+  专精化机制分析。 &
+  训练好的 SLM 模型；实验报告；
+  CCF-A 论文\#1 初稿。 &
+  第 4--7 月 \\
 \midrule
 M3 &
-  \textbf{MCP Packaging \& System Integration.}
-  Wrap each SLM as an MCP tool endpoint; integrate Planner (Qwen3-72B)
-  with MCP tool layer; end-to-end latency and accuracy evaluation. &
-  Open-source MCP toolkit; system demo;
-  draft of CCF-A paper \#2. &
-  Month 8–9 \\
+  \textbf{MCP 封装与系统集成。}
+  将 SLM 封装为 MCP 工具端点；集成规划器（Qwen3-72B）
+  与 MCP 工具层；端到端延迟与准确率评测。 &
+  开源 MCP 工具包；系统演示；
+  CCF-A 论文\#2 初稿。 &
+  第 8--9 月 \\
 \midrule
 M4 &
-  \textbf{Evaluation, Patent Filing \& Final Deliverables.}
-  Full system evaluation; user study with Alibaba stakeholders;
-  patent applications; final project report. &
-  Final report; published/submitted papers;
-  patent applications (1–2). &
-  Month 10–12 \\
+  \textbf{综合评测、专利申报与最终交付。}
+  全系统评测；与阿里巴巴相关团队开展用户研究；
+  专利申请；提交最终项目报告。 &
+  最终报告；已发表/投递论文；
+  专利申请（1--2 项）。 &
+  第 10--12 月 \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -430,59 +357,58 @@ M4 &
 \begin{figure}[H]
 \centering
 \input{fig_gantt.tikz}
-\caption{Project Gantt chart across four milestones.}
+\caption{项目甘特图（四个里程碑）。}
 \label{fig:gantt}
 \end{figure}
 
 % ══════════════════════════════════════════════════════════════════════════════
-%  3. DELIVERABLES
+%  三、预期成果
 % ══════════════════════════════════════════════════════════════════════════════
-\section{Deliverable(s)}
+\section{预期成果}
 
-The following final deliverables are committed for this project.
+本课题承诺交付以下最终成果。
 
 \begin{table}[H]
 \centering
 \renewcommand{\arraystretch}{1.4}
 \begin{tabularx}{\linewidth}{X l p{4.8cm}}
 \toprule
-\textbf{Description} & \textbf{Mode of Delivery} & \textbf{Remarks}\\
+\textbf{成果描述} & \textbf{交付形式} & \textbf{备注}\\
 \midrule
-Prototype system: MOLE1 cold-start SLM production pipeline &
-  Source code (open-source) &
-  Reproducible; released on GitHub \\
-MCP-compliant AIOps tool-endpoint toolkit &
-  Source code + documentation &
-  Compatible with standard MCP protocol \\
-2–3 academic papers on MOLE1 methodology and AIOps evaluation &
-  Academic papers &
-  Targeting CCF-A or equivalent top venues
-  (e.g., NeurIPS, ICML, ACL, ICSE, FSE) \\
-1–2 invention patents on cold-start CoT synthesis and MCP packaging &
-  Patent applications &
-  International or China patents \\
-Interim reports (kick-off, mid-term, final) &
-  Project reports &
-  Submitted per agreed schedule \\
+MOLE1 冷启动 SLM 生产流水线原型系统 &
+  源代码（开源） &
+  可复现；发布于 GitHub \\
+符合 MCP 协议的 AIOps 工具端点工具包 &
+  源代码 + 文档 &
+  兼容 MCP 标准协议 \\
+2--3 篇 MOLE1 方法论与 AIOps 评测学术论文 &
+  学术论文 &
+  目标 CCF-A 或同级别顶会\\
+  & &（如 NeurIPS、ICML、ACL、ICSE、FSE）\\
+1--2 项冷启动 CoT 合成与 MCP 封装发明专利 &
+  专利申请 &
+  国际或国内发明专利 \\
+项目阶段报告（启动、中期、结题） &
+  项目报告 &
+  按约定时间提交 \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-\noindent\textbf{Expected technical improvement:}
-SLMs produced by MOLE1 are expected to achieve accuracy within 5\% of GPT-4-class
-LLMs on AIOps fault-diagnosis benchmarks while reducing per-inference latency
-by $>$10$\times$ (from $\sim$1\,s to $<$100\,ms) and token cost to zero (local inference).
+\noindent\textbf{预期技术指标：}
+MOLE1 产出的 SLM 在 AIOps 故障诊断基准上准确率与 GPT-4 级 LLM 相差在 5\% 以内，
+单次推理延迟降低 $>$10 倍（从 $\sim$1\,s 降至 $<$100\,ms），推理成本降至零（本地推理，无 API 费用）。
 
-\noindent\textbf{Expected business value for Alibaba:}
-A reusable, domain-agnostic pipeline that Alibaba SRE teams can apply to any new
-AIOps sub-scenario within days, without labelling budget or pre-existing expert models.
+\noindent\textbf{对阿里巴巴的预期业务价值：}
+一套可复用、领域无关的通用流水线，阿里 SRE 团队可在数天内将其应用于任意新 AIOps 子场景，
+无需标注预算，无需预置专家模型。
 
 % ══════════════════════════════════════════════════════════════════════════════
-%  4. HUMAN RESOURCES, EQUIPMENT AND BUDGET
+%  四、人员、设备与经费预算
 % ══════════════════════════════════════════════════════════════════════════════
-\section{Human Resources, Equipment and Budgetary Plan}
+\section{人员、设备与经费预算}
 
-\subsection{Personnel}
+\subsection{项目人员}
 
 \begin{table}[H]
 \centering
@@ -490,100 +416,101 @@ AIOps sub-scenario within days, without labelling budget or pre-existing expert 
 \small
 \begin{tabular}{p{2.4cm} p{3.2cm} r r r p{1.6cm} p{1.6cm}}
 \toprule
-\textbf{Name} & \textbf{Profile} & \textbf{RMB/mo.} & \textbf{Period} &
-\textbf{Total} & \textbf{Role} & \textbf{Internship}\\
+\textbf{姓名} & \textbf{单位及职称} & \textbf{月劳务费} & \textbf{参与时长} &
+\textbf{小计} & \textbf{角色} & \textbf{阿里巴巴}\\
+& & \textbf{（元）} & & \textbf{（元）} & & \textbf{实习计划}\\
 \midrule
-\textit{<FILL: PI>} &
-  \textit{<FILL: Prof.>},\newline \textit{<FILL: Univ.>} &
-  12{,}000 & 3\,mo. & 36{,}000 & PI & ---\\
-\textit{<FILL: PhD 1>} &
-  PhD Student,\newline \textit{<FILL: Univ.>} &
-  12{,}000 & 12\,mo. & 144{,}000 & Research Asst. & Mo. 4--6\\
-\textit{<FILL: PhD 2>} &
-  PhD Student,\newline \textit{<FILL: Univ.>} &
-  12{,}000 & 12\,mo. & 144{,}000 & Research Asst. & Mo. 7--9\\
+\textit{【PI 姓名】} &
+  \textit{【职称】},\newline \textit{【院校名称】} &
+  12{,}000 & 3 个月 & 36{,}000 & PI & ---\\
+\textit{【博士生 1 姓名】} &
+  博士研究生,\newline \textit{【院校名称】} &
+  12{,}000 & 12 个月 & 144{,}000 & 科研助理 & 第 4--6 月\\
+\textit{【博士生 2 姓名】} &
+  博士研究生,\newline \textit{【院校名称】} &
+  12{,}000 & 12 个月 & 144{,}000 & 科研助理 & 第 7--9 月\\
 \midrule
-\multicolumn{4}{r}{\textbf{Sub-total Personnel (a)}} & \multicolumn{3}{r}{\textbf{RMB 324{,}000}}\\
+\multicolumn{4}{r}{\textbf{人员费用小计（甲）}} & \multicolumn{3}{r}{\textbf{324{,}000 元}}\\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\noindent\small\textit{Internship periods are indicative; exact dates subject to Alibaba SRE team schedule.}
+\noindent\small\textit{实习时间为预估安排，具体以阿里巴巴 SRE 团队日程为准。}
 
-\subsection{Equipment \& Supplies}
+\subsection{设备与科研经费}
 
 \begin{table}[H]
 \centering
 \renewcommand{\arraystretch}{1.4}
-\begin{tabularx}{\linewidth}{X r r p{5cm}}
+\begin{tabularx}{\linewidth}{X r r p{4.5cm}}
 \toprule
-\textbf{Item} & \textbf{Unit Price (RMB)} & \textbf{Total (RMB)} & \textbf{Remarks}\\
+\textbf{经费项目} & \textbf{单价（元）} & \textbf{合计（元）} & \textbf{说明}\\
 \midrule
-GPU cloud computing (A100 node-hours) & — & 91,000 &
-  For SLM training runs (Stage 2--3)\\
-Local inference server (lease/purchase) & 50,000 & 50,000 &
-  MCP endpoint deployment \& latency testing\\
-Conference travel (2 venues) & 15,000 & 30,000 &
-  Domestic + international top-venue presentation\\
-Open-access publication fees & 10,000 & 20,000 &
-  ACL Anthology / NeurIPS open access\\
+GPU 云算力（A100 节点·时） & --- & 91{,}000 &
+  SLM 训练（阶段二至三）\\
+本地推理服务器（租用/购置） & 50{,}000 & 50{,}000 &
+  MCP 端点部署及延迟测试\\
+学术会议差旅（2 次） & 15{,}000 & 30{,}000 &
+  国内外顶会出席及汇报\\
+开放获取论文版面费 & 10{,}000 & 20{,}000 &
+  ACL Anthology / NeurIPS 开放版面\\
 \midrule
-\multicolumn{2}{r}{\textbf{Sub-total Research Expenses (b)}} & \textbf{191,000} & \\
+\multicolumn{2}{r}{\textbf{科研经费小计（乙）}} & \textbf{191{,}000} & \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-\subsection{Budgetary Plan}
+\subsection{经费汇总}
 
 \begin{table}[H]
 \centering
 \renewcommand{\arraystretch}{1.5}
 \begin{tabularx}{\linewidth}{l X r}
 \toprule
-\textbf{Item} & \textbf{Remarks} & \textbf{Amount (RMB)}\\
+\textbf{经费类别} & \textbf{说明} & \textbf{金额（元）}\\
 \midrule
-(a) Total Personnel Expenses & See Section 4.1 & 324,000\\
-(b) Total Research Expenses  & See Section 4.2 & 191,000\\
-(c) Indirect Cost            &
-  University overhead: $16.5\%\times(\text{a}+\text{b})
-  = 16.5\%\times 515{,}000 \approx 85{,}000$ & 85,000\\
+（甲）人员费用 & 见 4.1 节 & 324{,}000\\
+（乙）科研经费 & 见 4.2 节 & 191{,}000\\
+（丙）间接费用 &
+  学校管理费：$16.5\%\times$（甲+乙）
+  $= 16.5\%\times515{,}000 \approx 85{,}000$ & 85{,}000\\
 \midrule
-\textbf{Grand Total} & (a) + (b) + (c) & \textbf{600,000}\\
+\textbf{合计} & （甲）+（乙）+（丙） & \textbf{600{,}000}\\
 \bottomrule
 \end{tabularx}
 \end{table}
 
 % ══════════════════════════════════════════════════════════════════════════════
-%  5. BIOGRAPHICAL SKETCHES OF PRINCIPAL INVESTIGATOR(S)
+%  五、申请人简介
 % ══════════════════════════════════════════════════════════════════════════════
-\section{Biographical Sketches of Principal Investigator(s)}
+\section{申请人简介}
 
-\textbf{\textit{<FILL: PI Name>}}\\
-\textit{<FILL: Professor / Associate Professor>}, \textit{<FILL: Department Name>}, \textit{<FILL: University Name>}\\
-Email: \textit{<FILL: email>} \quad Homepage: \textit{<FILL: homepage URL>}
+\textbf{\textit{【PI 姓名】}}\\
+\textit{【职称/职务】}，\textit{【院系名称】}，\textit{【院校名称】}\\
+邮箱：\textit{【邮箱地址】} \quad 个人主页：\textit{【主页 URL】}
 
-\textbf{Research Interests:} Large Language Models, Knowledge Distillation, AIOps, Intelligent Software Systems
+\textbf{研究方向：}大语言模型、知识蒸馏、AIOps、智能软件系统
 
-\textbf{Representative Publications (recent 5 years):}
+\textbf{代表性论文（近五年）：}
 \begin{enumerate}[leftmargin=*, itemsep=2pt]
-  \item \textit{<FILL: Author(s), Title, Venue, Year>}
-  \item \textit{<FILL: Author(s), Title, Venue, Year>}
-  \item \textit{<FILL: Author(s), Title, Venue, Year>}
+  \item \textit{【作者，论文题目，期刊/会议，年份】}
+  \item \textit{【作者，论文题目，期刊/会议，年份】}
+  \item \textit{【作者，论文题目，期刊/会议，年份】}
 \end{enumerate}
 
-\textbf{Grants and Awards:}
+\textbf{主持/参与科研项目：}
 \begin{itemize}[leftmargin=*, itemsep=2pt]
-  \item \textit{<FILL: Funding Source, Project Title, Amount, Year>}
-  \item \textit{<FILL: Funding Source, Project Title, Amount, Year>}
+  \item \textit{【资助来源，项目名称，经费，起止年份】}
+  \item \textit{【资助来源，项目名称，经费，起止年份】}
 \end{itemize}
 
-\textbf{Relevant Industrial Experience:}
-\textit{<FILL: Relevant industrial collaboration experience, if any>}
+\textbf{与业界合作经历：}
+\textit{【填写与阿里/工业界相关的合作经历，如有】}
 
 % ══════════════════════════════════════════════════════════════════════════════
-%  6. REFERENCES
+%  六、参考文献
 % ══════════════════════════════════════════════════════════════════════════════
-\section{References}
+\section{参考文献}
 
 \bibliographystyle{abbrvnat}
 \bibliography{refs}
