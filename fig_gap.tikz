@@ -1,49 +1,52 @@
-% Figure 1: Gap comparison — existing methods vs MOLE1
-\begin{tikzpicture}[node distance=0.5cm and 1.2cm, font=\small]
+% 图1：研究空白对比——现有方法 vs MOLE1
+\begin{tikzpicture}[node distance=0.5cm and 1.4cm, font=\small]
 
-% ── Left column: Existing methods ────────────────────────────────────────────
-\node[box=4.5cm, minimum height=0.7cm] (e1)
-  {\textbf{Existing SLM-Production Methods}};
+% ── 左列：现有方法 ────────────────────────────────────────────────────────────
+\node[box=4.8cm, minimum height=0.7cm, fill=black!10] (e1)
+  {\textbf{现有 SLM 生产方法}};
 
-\node[greybox=4.5cm, below=0.35cm of e1] (e2)
-  {Human-labelled CoT\\(expensive, slow)};
-\node[greybox=4.5cm, below=0.35cm of e2] (e3)
-  {Domain-aware teacher LLM\\(requires prior knowledge)};
-\node[greybox=4.5cm, below=0.35cm of e3] (e4)
-  {Pre-existing student model\\(chicken-and-egg)};
+\node[greybox=4.8cm, minimum height=0.75cm, below=0.3cm of e1] (e2)
+  {人工标注 CoT（昂贵、缓慢）};
+\node[greybox=4.8cm, minimum height=0.75cm, below=0.2cm of e2] (e3)
+  {具领域知识的教师 LLM};
+\node[greybox=4.8cm, minimum height=0.75cm, below=0.2cm of e3] (e4)
+  {已有学生模型（先有鸡先有蛋）};
 
-\node[box=4.5cm, minimum height=0.7cm, below=0.35cm of e4,
-      draw=black, fill=black!8] (efail)
-  {\textbf{Cold-Start: All Prerequisites Missing}\\
-   $\Rightarrow$ \textit{Pipeline cannot start}};
+% 左列"需满足其一"注释
+\node[font=\footnotesize\itshape, text=black!55, below=0.15cm of e4]
+  (enote) {$\downarrow$\; 冷启动时三者均不可得};
 
-% ── Right column: MOLE1 ──────────────────────────────────────────────────────
-\node[box=4.5cm, minimum height=0.7cm, right=1.6cm of e1] (m1)
-  {\textbf{MOLE1 (Proposed)}};
+\node[box=4.8cm, minimum height=0.8cm, below=0.2cm of enote,
+      draw=black!60, fill=black!22] (efail)
+  {$\times$\enspace\textbf{前提缺失，流水线无法启动}};
 
-\node[greybox=4.5cm, below=0.35cm of m1] (m2)
-  {Raw $\langle$query, answer$\rangle$ pairs\\(from existing logs — free)};
-\node[greybox=4.5cm, below=0.35cm of m2] (m3)
-  {Medium LLM generates\\candidate CoT traces};
-\node[greybox=4.5cm, below=0.35cm of m3] (m4)
-  {\textbf{Answer-verification filter}\\(ground-truth answer as verifier)};
+% ── 右列：MOLE1 ──────────────────────────────────────────────────────────────
+\node[box=4.8cm, minimum height=0.7cm, fill=black!10, right=1.4cm of e1] (m1)
+  {\textbf{MOLE1（本方案）}};
 
-\node[box=4.5cm, minimum height=0.7cm, below=0.35cm of m4,
-      draw=black!70, fill=black!4] (mok)
-  {Verified CoT triples $\rightarrow$ SLM training\\
-   $\Rightarrow$ \textit{No human annotation needed}};
+\node[greybox=4.8cm, minimum height=0.75cm, below=0.3cm of m1] (m2)
+  {原始 $\langle$查询, 答案$\rangle$ 对（来自现有日志）};
+\node[greybox=4.8cm, minimum height=0.75cm, below=0.2cm of m2] (m3)
+  {中型 LLM（14B）生成候选 CoT 推理链};
+\node[greybox=4.8cm, minimum height=0.75cm, below=0.2cm of m3] (m4)
+  {\textbf{答案验证过滤}（标准答案即验证器）};
 
-% ── Vertical flow arrows (right column) ──────────────────────────────────────
+% 右列流向箭头
 \draw[arrow] (m2) -- (m3);
 \draw[arrow] (m3) -- (m4);
-\draw[arrow] (m4) -- (mok);
+\draw[arrow] (m4.south) -- ++(0,-0.37);
 
-% ── Separator line ────────────────────────────────────────────────────────────
-\draw[thick, dashed] ($(e1.north east)!0.5!(m1.north west)$)
+\node[box=4.8cm, minimum height=0.8cm, below=0.37cm of m4,
+      draw=black!60, fill=black!4] (mok)
+  {$\checkmark$\enspace\textbf{无需标注，直接产出专家 SLM}};
+
+% ── 分隔线 ────────────────────────────────────────────────────────────────────
+\draw[thick, dashed, black!50]
+  ($(e1.north east)!0.5!(m1.north west)+(0,0.25)$)
   -- ($(efail.south east)!0.5!(mok.south west)$);
 
-% ── Column labels ─────────────────────────────────────────────────────────────
-\node[above=0.15cm of e1, font=\small\bfseries] {Prior Work};
-\node[above=0.15cm of m1, font=\small\bfseries] {This Work};
+% ── 列标签 ────────────────────────────────────────────────────────────────────
+\node[above=0.2cm of e1, font=\small\bfseries] {已有工作};
+\node[above=0.2cm of m1, font=\small\bfseries] {本工作};
 
 \end{tikzpicture}
