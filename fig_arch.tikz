@@ -27,8 +27,10 @@
 % ── 第三层：MOLE1 生产流水线（与 input 同宽居中）────────────────────────────
 \node[box=10cm, minimum height=0.9cm, below=0.7cm of t2]
   at ([yshift=-0.7cm]t2.south -| input.center) (mole)
-  {\textbf{MOLE1 生产流水线}
-   （数据采集 $\to$ CoT 合成 $\to$ 答案验证过滤 $\to$ SLM 训练）};
+  {\textbf{MOLE1 三循环生产流水线}
+   （C1: 数据采集 + CoT 合成 + 过滤 \;$\to$\;
+    C2: SFT $\to$ $\pi_0$ \;$\to$\;
+    C3: AIOps-GRPO $\to$ $\pi^*$；Bootstrap 回路迭代进化）};
 
 % ── 箭头：输入 → Planner ──────────────────────────────────────────────────────
 \draw[arrow] (input) -- (planner);
