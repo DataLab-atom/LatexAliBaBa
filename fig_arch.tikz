@@ -18,11 +18,11 @@
   {MCP Tool Layer (local deployment, $<$100\,ms)};
 
 \node[box=2.8cm, minimum height=1.1cm, below=0.3cm of mcplabel] (t1)
-  {\textbf{DB-Fault SLM}\\(Qwen3-1.5B)\\{\footnotesize MOLE1-trained}};
+  {\textbf{DB-Fault SLM}\\(Qwen3-1.8B)\\{\footnotesize MOLE1-trained}};
 \node[box=2.8cm, minimum height=1.1cm, right=0.4cm of t1] (t2)
-  {\textbf{Network SLM}\\(Qwen3-3B)\\{\footnotesize MOLE1-trained}};
+  {\textbf{Network SLM}\\(Qwen3-4B)\\{\footnotesize MOLE1-trained}};
 \node[box=2.8cm, minimum height=1.1cm, right=0.4cm of t2] (t3)
-  {\textbf{Container SLM}\\(Qwen3-1.5B)\\{\footnotesize MOLE1-trained}};
+  {\textbf{Container SLM}\\(Qwen3-1.8B)\\{\footnotesize MOLE1-trained}};
 \node[box=1.5cm, minimum height=1.1cm, right=0.4cm of t3,
       draw=black!40, text=black!40] (tdot)
   {\ldots\\new domain};
