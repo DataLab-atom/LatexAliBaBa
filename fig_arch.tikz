@@ -7,7 +7,7 @@
 
 % ── 第一层：云端 Planner ──────────────────────────────────────────────────────
 \node[greybox=9.5cm, minimum height=1.0cm, below=0.5cm of input] (planner)
-  {\textbf{云端 LLM Planner}（Qwen3-72B）\\
+  {\textbf{云端 LLM Planner}（72B）\\
    \footnotesize 分解任务 $\to$ 选择并排序 MCP 工具};
 
 \node[left=0.05cm of planner, font=\footnotesize\itshape, rotate=90,
@@ -18,11 +18,11 @@
   {MCP 工具层（本地部署，$<$100\,ms）};
 
 \node[box=2.8cm, minimum height=1.1cm, below=0.3cm of mcplabel] (t1)
-  {\textbf{数据库故障 SLM}\\(Qwen3-1.8B)\\{\footnotesize MOLE1 训练}};
+  {\textbf{数据库故障 SLM}\\(1.8B)\\{\footnotesize MOLE1 训练}};
 \node[box=2.8cm, minimum height=1.1cm, right=0.4cm of t1] (t2)
-  {\textbf{网络故障 SLM}\\(Qwen3-4B)\\{\footnotesize MOLE1 训练}};
+  {\textbf{网络故障 SLM}\\(4B)\\{\footnotesize MOLE1 训练}};
 \node[box=2.8cm, minimum height=1.1cm, right=0.4cm of t2] (t3)
-  {\textbf{容器故障 SLM}\\(Qwen3-1.8B)\\{\footnotesize MOLE1 训练}};
+  {\textbf{容器故障 SLM}\\(1.8B)\\{\footnotesize MOLE1 训练}};
 \node[box=1.5cm, minimum height=1.1cm, right=0.4cm of t3,
       draw=black!40, text=black!40] (tdot)
   {\ldots\\新领域};
