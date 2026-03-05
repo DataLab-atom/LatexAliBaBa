@@ -13,3 +13,4 @@
 *.nav
 *.snm
 *.vrb
+_pandoc_tmp/
